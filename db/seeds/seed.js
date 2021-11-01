@@ -1,6 +1,6 @@
 const db = require('../connection');
 const format = require('pg-format');
-const { formatUsers, formatTopics } = require('../../utils/utils');
+const { formatUsers, formatTopics, formatArticles } = require('../../utils');
 
 const seed = (data) => {
   const { articleData, commentData, topicData, userData } = data;
@@ -31,7 +31,7 @@ const seed = (data) => {
         votes INT DEFAULT 0,
         topic VARCHAR REFERENCES topics(slug) NOT NULL,
         author VARCHAR REFERENCES users(username) NOT NULL,
-        created_at DATE DEFAULT NOW() NOT NULL
+        created_at TIMESTAMP DEFAULT NOW()
       );`);
     })
     .then(() => {
@@ -40,7 +40,7 @@ const seed = (data) => {
         author VARCHAR REFERENCES users(username) NOT NULL,
         article_id INT REFERENCES articles(article_id),
         votes INT DEFAULT 0,
-        created_at DATE DEFAULT NOW() NOT NULL,
+        created_at TIMESTAMP DEFAULT NOW(),
         body TEXT NOT NULL
       );`);
     })
@@ -57,6 +57,14 @@ const seed = (data) => {
         format(
           `INSERT INTO topics (slug, description) VALUES %L`,
           formatTopics(topicData)
+        )
+      );
+    })
+    .then(() => {
+      return db.query(
+        format(
+          `INSERT INTO articles (title, body, votes, topic, author, created_at) VALUES %L`,
+          formatArticles(articleData)
         )
       );
     });
