@@ -1,10 +1,15 @@
-const { formatUsers, formatTopics } = require('../utils/utils');
+const {
+  formatUsers,
+  formatTopics,
+  formatDate,
+  formatArticles,
+} = require('../utils');
 
-describe('formatUsers()', () => {
+describe('formatUsers', () => {
   test('Returns an array', () => {
     expect(Array.isArray(formatUsers())).toBe(true);
   });
-  test('Returns an array with the user data formatted in the correct order when given an array with a user object', () => {
+  test('Returns an array with the user data formatted in the correct order when given an array with a single user object', () => {
     const user = [
       {
         username: 'butter_bridge',
@@ -84,11 +89,11 @@ describe('formatUsers()', () => {
   });
 });
 
-describe('formatTopics()', () => {
+describe('formatTopics', () => {
   test('Returns an array', () => {
     expect(Array.isArray(formatTopics())).toEqual(true);
   });
-  test('Returns an array with the topics data formatted in the correct order when given an array with a topic object', () => {
+  test('Returns an array with the topics data formatted in the correct order when given an array with a single topic object', () => {
     const topic = [
       {
         description: 'The man, the Mitch, the legend',
@@ -139,6 +144,131 @@ describe('formatTopics()', () => {
       {
         description: 'Not dogs',
         slug: 'cats',
+      },
+    ]);
+  });
+});
+
+describe('FormatDate', () => {
+  test('Returns a string', () => {
+    const date = new Date(1594329060000);
+    expect(typeof formatDate(date)).toBe('string');
+  });
+  test('Returns a string with a formated timestamp when given a date object', () => {
+    const date = new Date(1594329060000);
+    expect(formatDate(date)).toBe('2020-07-09 21:11:00');
+  });
+  test('Does not mutate the original input', () => {
+    const date = new Date(1594329060000);
+    formatDate(date);
+    expect(date).toEqual(new Date(1594329060000));
+  });
+});
+
+describe('formatArticles', () => {
+  test('Returns an array', () => {
+    expect(Array.isArray(formatArticles())).toBe(true);
+  });
+  test('Returns an array with the article data formatted in the correct order and date when given an array with a single article object', () => {
+    const article = [
+      {
+        title: 'Living in the shadow of a great man',
+        topic: 'mitch',
+        author: 'butter_bridge',
+        body: 'I find this existence challenging',
+        created_at: new Date(1594329060000),
+        votes: 100,
+      },
+    ];
+
+    expect(formatArticles(article)).toEqual([
+      [
+        'Living in the shadow of a great man',
+        'I find this existence challenging',
+        100,
+        'mitch',
+        'butter_bridge',
+        '2020-07-09 21:11:00',
+      ],
+    ]);
+  });
+  test('Returns an array of articles data formatted in the correct order and date when given an array with multiple articles objects', () => {
+    const articles = [
+      {
+        title: 'Living in the shadow of a great man',
+        topic: 'mitch',
+        author: 'butter_bridge',
+        body: 'I find this existence challenging',
+        created_at: new Date(1594329060000),
+        votes: 100,
+      },
+      {
+        title: 'Eight pug gifs that remind me of mitch',
+        topic: 'mitch',
+        author: 'icellusedkars',
+        body: 'some gifs',
+        created_at: new Date(1604394720000),
+        votes: 0,
+      },
+    ];
+
+    expect(formatArticles(articles)).toEqual([
+      [
+        'Living in the shadow of a great man',
+        'I find this existence challenging',
+        100,
+        'mitch',
+        'butter_bridge',
+        '2020-07-09 21:11:00',
+      ],
+      [
+        'Eight pug gifs that remind me of mitch',
+        'some gifs',
+        0,
+        'mitch',
+        'icellusedkars',
+        '2020-11-03 09:12:00',
+      ],
+    ]);
+  });
+  test('Does not mutate the original input', () => {
+    const articles = [
+      {
+        title: 'Living in the shadow of a great man',
+        topic: 'mitch',
+        author: 'butter_bridge',
+        body: 'I find this existence challenging',
+        created_at: new Date(1594329060000),
+        votes: 100,
+      },
+      {
+        title: 'Eight pug gifs that remind me of mitch',
+        topic: 'mitch',
+        author: 'icellusedkars',
+        body: 'some gifs',
+        created_at: new Date(1604394720000),
+        votes: 0,
+      },
+    ];
+
+    formatArticles(articles);
+
+    expect(articles).toEqual([
+      {
+        title: 'Living in the shadow of a great man',
+        topic: 'mitch',
+        author: 'butter_bridge',
+        body: 'I find this existence challenging',
+        created_at: new Date(1594329060000),
+        votes: 100,
+      },
+      {
+        title: 'Eight pug gifs that remind me of mitch',
+        topic: 'mitch',
+        author: 'icellusedkars',
+        body: 'some gifs',
+        created_at: new Date(1604394720000),
+        votes: 0,
       },
     ]);
   });
