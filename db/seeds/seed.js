@@ -1,6 +1,11 @@
 const db = require('../connection');
 const format = require('pg-format');
-const { formatUsers, formatTopics, formatArticles } = require('../../utils');
+const {
+  formatUsers,
+  formatTopics,
+  formatArticles,
+  formatComments,
+} = require('../../utils');
 
 const seed = (data) => {
   const { articleData, commentData, topicData, userData } = data;
@@ -65,6 +70,14 @@ const seed = (data) => {
         format(
           `INSERT INTO articles (title, body, votes, topic, author, created_at) VALUES %L`,
           formatArticles(articleData)
+        )
+      );
+    })
+    .then(() => {
+      return db.query(
+        format(
+          `INSERT INTO comments (author, article_id, votes, created_at, body) VALUES %L`,
+          formatComments(commentData)
         )
       );
     });
