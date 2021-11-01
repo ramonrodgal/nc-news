@@ -3,6 +3,7 @@ const {
   formatTopics,
   formatDate,
   formatArticles,
+  formatComments,
 } = require('../utils');
 
 describe('formatUsers', () => {
@@ -269,6 +270,99 @@ describe('formatArticles', () => {
         body: 'some gifs',
         created_at: new Date(1604394720000),
         votes: 0,
+      },
+    ]);
+  });
+});
+
+describe.only('formatComments', () => {
+  test('Returns an array', () => {
+    expect(Array.isArray(formatComments())).toBe(true);
+  });
+  test('Returns an array with the comment data formatted in the correct order and date when given an array with a single comment object', () => {
+    const comment = [
+      {
+        body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+        votes: 16,
+        author: 'butter_bridge',
+        article_id: 9,
+        created_at: new Date(1586179020000),
+      },
+    ];
+
+    expect(formatComments(comment)).toEqual([
+      [
+        'butter_bridge',
+        9,
+        16,
+        '2020-04-06 13:17:00',
+        "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+      ],
+    ]);
+  });
+  test('Returns an array of comments data formatted in the correct order and date when given an array with multiple comments objects', () => {
+    const comments = [
+      {
+        body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+        votes: 16,
+        author: 'butter_bridge',
+        article_id: 9,
+        created_at: new Date(1586179020000),
+      },
+      {
+        body: 'I hate streaming noses',
+        votes: 0,
+        author: 'icellusedkars',
+        article_id: 1,
+        created_at: new Date(1604437200000),
+      },
+    ];
+
+    expect(formatComments(comments)).toEqual([
+      [
+        'butter_bridge',
+        9,
+        16,
+        '2020-04-06 13:17:00',
+        "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+      ],
+      ['icellusedkars', 1, 0, '2020-11-03 21:00:00', 'I hate streaming noses'],
+    ]);
+  });
+  test('Does not mutate the original input', () => {
+    const comments = [
+      {
+        body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+        votes: 16,
+        author: 'butter_bridge',
+        article_id: 9,
+        created_at: new Date(1586179020000),
+      },
+      {
+        body: 'I hate streaming noses',
+        votes: 0,
+        author: 'icellusedkars',
+        article_id: 1,
+        created_at: new Date(1604437200000),
+      },
+    ];
+
+    formatComments(comments);
+
+    expect(comments).toEqual([
+      {
+        body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+        votes: 16,
+        author: 'butter_bridge',
+        article_id: 9,
+        created_at: new Date(1586179020000),
+      },
+      {
+        body: 'I hate streaming noses',
+        votes: 0,
+        author: 'icellusedkars',
+        article_id: 1,
+        created_at: new Date(1604437200000),
       },
     ]);
   });
