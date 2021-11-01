@@ -1,4 +1,4 @@
-const { formatUsers } = require('../utils/utils');
+const { formatUsers, formatTopics } = require('../utils/utils');
 
 describe('formatUsers()', () => {
   test('Returns an array', () => {
@@ -79,6 +79,66 @@ describe('formatUsers()', () => {
         name: 'sam',
         avatar_url:
           'https://avatars2.githubusercontent.com/u/24604688?s=460&v=4',
+      },
+    ]);
+  });
+});
+
+describe('formatTopics()', () => {
+  test('Returns an array', () => {
+    expect(Array.isArray(formatTopics())).toEqual(true);
+  });
+  test('Returns an array with the topics data formatted in the correct order when given an array with a topic object', () => {
+    const topic = [
+      {
+        description: 'The man, the Mitch, the legend',
+        slug: 'mitch',
+      },
+    ];
+
+    expect(formatTopics(topic)).toEqual([
+      ['mitch', 'The man, the Mitch, the legend'],
+    ]);
+  });
+  test('Returns an array of topics data formatted in the correct order when given an array with multiple topics objects', () => {
+    const topics = [
+      {
+        description: 'The man, the Mitch, the legend',
+        slug: 'mitch',
+      },
+      {
+        description: 'Not dogs',
+        slug: 'cats',
+      },
+    ];
+
+    expect(formatTopics(topics)).toEqual([
+      ['mitch', 'The man, the Mitch, the legend'],
+      ['cats', 'Not dogs'],
+    ]);
+  });
+  test('Does not mutate the original input', () => {
+    const topics = [
+      {
+        description: 'The man, the Mitch, the legend',
+        slug: 'mitch',
+      },
+      {
+        description: 'Not dogs',
+        slug: 'cats',
+      },
+    ];
+
+    formatTopics(topics);
+
+    expect(topics).toEqual([
+      {
+        description: 'The man, the Mitch, the legend',
+        slug: 'mitch',
+      },
+      {
+        description: 'Not dogs',
+        slug: 'cats',
       },
     ]);
   });
