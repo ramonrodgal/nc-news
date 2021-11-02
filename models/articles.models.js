@@ -32,11 +32,16 @@ exports.updateArticleById = async (article_id, body) => {
   let queryString = `
     UPDATE articles 
     SET votes = votes + $1 
-    WHERE article_id = $2`;
+    WHERE article_id = $2
+    RETURNING *`;
 
   let queryParams = [inc_votes, article_id];
 
-  await db.query(queryString, queryParams);
+  const response = await db.query(queryString, queryParams);
+
+  if (response.rows.length === 0) {
+    return Promise.reject({ status: 404, msg: 'Article Not Found' });
+  }
 
   return await this.fetchArticleById(article_id);
 };
