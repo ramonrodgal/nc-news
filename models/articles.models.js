@@ -1,5 +1,5 @@
 const db = require('../db/connection.js');
-const { formatArticlesResponse } = require('../utils/models');
+const { formatArticleResponse } = require('../utils/models');
 
 exports.fetchArticleById = async (article_id) => {
   const queryStr = `
@@ -19,7 +19,7 @@ exports.fetchArticleById = async (article_id) => {
     return Promise.reject({ status: 404, msg: 'Article Not Found' });
   }
 
-  return formatArticlesResponse(rows);
+  return formatArticleResponse(rows[0]);
 };
 
 exports.updateArticleById = async (article_id, body) => {
@@ -44,4 +44,20 @@ exports.updateArticleById = async (article_id, body) => {
   }
 
   return await this.fetchArticleById(article_id);
+};
+
+exports.fetchArticles = async () => {
+  const queryString = `
+      SELECT 
+        articles.*, COUNT(comments.comment_id) AS comment_count
+      FROM articles
+      LEFT JOIN comments 
+      ON articles.article_id = comments.article_id
+      GROUP BY articles.article_id;`;
+
+  const { rows } = await db.query(queryString);
+
+  const articles = rows.map((article) => formatArticleResponse(article));
+
+  return articles;
 };

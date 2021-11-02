@@ -158,3 +158,30 @@ describe('/api/articles/:article_id', () => {
     });
   });
 });
+
+describe('/api/articles', () => {
+  describe('GET', () => {
+    test('status: 200 responds with all the articles', async () => {
+      const {
+        body: { articles },
+      } = await request(app).get('/api/articles').expect(200);
+
+      expect(articles.length).toBe(12);
+
+      const articleTest = {
+        author: expect.any(String),
+        title: expect.any(String),
+        article_id: expect.any(Number),
+        body: expect.any(String),
+        topic: expect.any(String),
+        created_at: expect.any(String),
+        votes: expect.any(Number),
+        comment_count: expect.any(Number),
+      };
+
+      articles.forEach((article) => {
+        expect(article).toEqual(articleTest);
+      });
+    });
+  });
+});
