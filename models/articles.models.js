@@ -15,5 +15,9 @@ exports.fetchArticleById = async (article_id) => {
 
   const { rows } = await db.query(queryStr, queryParams);
 
+  if (rows.length === 0) {
+    return Promise.reject({ status: 404, msg: 'Article Not Found' });
+  }
+
   return formatArticlesResponse(rows);
 };

@@ -64,5 +64,12 @@ describe('/api/articles/:article_id', () => {
 
       expect(msg).toBe('Bad Request');
     });
+    test('status 404, responds with a message', async () => {
+      const {
+        body: { msg },
+      } = await request(app).get('/api/articles/9999').expect(404);
+
+      expect(msg).toBe('Article Not Found');
+    });
   });
 });
