@@ -186,7 +186,7 @@ describe('/api/articles', () => {
   });
 });
 
-describe.only('/api/articles/:article_id/comments', () => {
+describe('/api/articles/:article_id/comments', () => {
   describe('GET', () => {
     test('status 200: responds with an array of comments in the correct format', async () => {
       const article_id = 1;
@@ -225,6 +225,32 @@ describe.only('/api/articles/:article_id/comments', () => {
       } = await request(app).get('/api/articles/9999/comments').expect(404);
 
       expect(msg).toEqual('Article Not Found');
+    });
+  });
+  describe.only('POST', () => {
+    test('status 200: responds with the posted comment', async () => {
+      const article_id = 1;
+      const body = {
+        username: 'butter_bridge',
+        body: 'I like bananas!',
+      };
+
+      const {
+        body: { comment },
+      } = await request(app)
+        .post(`/api/articles/${article_id}/comments`)
+        .send(body)
+        .expect(200);
+
+      const expected = {
+        comment_id: 19,
+        votes: 0,
+        created_at: expect.any(String),
+        author: 'butter_bridge',
+        body: 'I like bananas!',
+      };
+
+      expect(comment).toEqual(expected);
     });
   });
 });
