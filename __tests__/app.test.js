@@ -74,7 +74,7 @@ describe('/api/articles/:article_id', () => {
     });
   });
   describe('PATCH', () => {
-    test('status 200: responds with the updated article', async () => {
+    test('status 200: responds with the article containing the value of the property votes increased', async () => {
       const article_id = 1;
       const body = {
         inc_votes: 1,
@@ -94,6 +94,31 @@ describe('/api/articles/:article_id', () => {
         topic: 'mitch',
         created_at: '2020-07-09 20:11:00',
         votes: 101,
+        comment_count: 11,
+      };
+
+      expect(article).toEqual(expected);
+    });
+    test('status 200: responds with the article containing the value of the property votes decreased', async () => {
+      const article_id = 1;
+      const body = {
+        inc_votes: -50,
+      };
+      const {
+        body: { article },
+      } = await request(app)
+        .patch(`/api/articles/${article_id}`)
+        .send(body)
+        .expect(200);
+
+      const expected = {
+        author: 'butter_bridge',
+        title: 'Living in the shadow of a great man',
+        article_id: 1,
+        body: 'I find this existence challenging',
+        topic: 'mitch',
+        created_at: '2020-07-09 20:11:00',
+        votes: 50,
         comment_count: 11,
       };
 
