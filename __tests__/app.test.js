@@ -99,5 +99,21 @@ describe('/api/articles/:article_id', () => {
 
       expect(article).toEqual(expected);
     });
+    test('status 400: responds with a message', async () => {
+      const article_id = 1;
+
+      const body = {
+        not_valid: 200,
+      };
+
+      const {
+        body: { msg },
+      } = await request(app)
+        .patch(`/api/articles/${article_id}`)
+        .send(body)
+        .expect(400);
+
+      expect(msg).toBe('Bad Request. Invalid body');
+    });
   });
 });
