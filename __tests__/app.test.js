@@ -185,3 +185,46 @@ describe('/api/articles', () => {
     });
   });
 });
+
+describe.only('/api/articles/:article_id/comments', () => {
+  describe('GET', () => {
+    test('status 200: responds with an array of comments in the correct format', async () => {
+      const article_id = 1;
+      const {
+        body: { comments },
+      } = await request(app)
+        .get(`/api/articles/${article_id}/comments`)
+        .expect(200);
+
+      expect(comments.length).toEqual(11);
+
+      const commentTest = {
+        comment_id: expect.any(Number),
+        votes: expect.any(Number),
+        created_at: expect.any(String),
+        author: expect.any(String),
+        body: expect.any(String),
+      };
+
+      comments.forEach((comment) => {
+        expect(comment).toEqual(commentTest);
+      });
+    });
+    test('status 400: responds with a message', async () => {
+      const {
+        body: { msg },
+      } = await request(app)
+        .get('/api/articles/not-valid-id/comments')
+        .expect(400);
+
+      expect(msg).toEqual('Bad Request');
+    });
+    test('status 404: responds with a message', async () => {
+      const {
+        body: { msg },
+      } = await request(app).get('/api/articles/9999/comments').expect(404);
+
+      expect(msg).toEqual('Article Not Found');
+    });
+  });
+});

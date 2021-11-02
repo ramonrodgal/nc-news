@@ -1,5 +1,8 @@
 const db = require('../db/connection.js');
-const { formatArticleResponse } = require('../utils/models');
+const {
+  formatArticleResponse,
+  formatCommentResponse,
+} = require('../utils/models');
 
 exports.fetchArticleById = async (article_id) => {
   const queryStr = `
@@ -60,4 +63,23 @@ exports.fetchArticles = async () => {
   const articles = rows.map((article) => formatArticleResponse(article));
 
   return articles;
+};
+
+exports.fetchCommentsFromArticle = async (article_id) => {
+  const queryString = `
+    SELECT comment_id, votes, created_at, author, body
+    FROM comments
+    WHERE article_id = $1`;
+
+  const queryParams = [article_id];
+
+  const { rows } = await db.query(queryString, queryParams);
+
+  if (rows.length === 0) {
+    return Promise.reject({ status: 404, msg: 'Article Not Found' });
+  }
+
+  const comments = rows.map((comment) => formatCommentResponse(comment));
+
+  return comments;
 };
