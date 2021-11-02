@@ -1,5 +1,10 @@
 const express = require('express');
 const apiRouter = require('./routes/api.routers');
+const {
+  handleCustomErrors,
+  handlePsqlErrors,
+  handle500Errors,
+} = require('./controllers/errors.controllers');
 
 const app = express();
 app.use(express.json());
@@ -10,25 +15,8 @@ app.all('*', (req, res) => {
   res.status(404).send({ msg: 'Invalid URL' });
 });
 
-app.use((err, req, res, next) => {
-  if (err.status) {
-    res.status(err.status).send({ msg: err.msg });
-  } else {
-    next(err);
-  }
-});
-
-app.use((err, req, res, next) => {
-  if (err.code === '22P02') {
-    res.status(400).send({ msg: 'Bad Request' });
-  } else {
-    next(err);
-  }
-});
-
-app.use((err, req, res, next) => {
-  console.log(err);
-  res.status(500).send({ msg: 'Internal Server Error' });
-});
+app.use(handleCustomErrors);
+app.use(handlePsqlErrors);
+app.use(handle500Errors);
 
 module.exports = app;
