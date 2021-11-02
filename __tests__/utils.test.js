@@ -370,7 +370,7 @@ describe('formatComments', () => {
   });
 });
 
-describe.only('formatArticlesResponse', () => {
+describe('formatArticlesResponse', () => {
   const input = [
     {
       article_id: 1,

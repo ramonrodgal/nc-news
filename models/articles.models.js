@@ -21,3 +21,18 @@ exports.fetchArticleById = async (article_id) => {
 
   return formatArticlesResponse(rows);
 };
+
+exports.updateArticleById = async (article_id, body) => {
+  const { inc_votes } = body;
+
+  let queryString = `
+    UPDATE articles 
+    SET votes = votes + $1 
+    WHERE article_id = $2`;
+
+  let queryParams = [inc_votes, article_id];
+
+  await db.query(queryString, queryParams);
+
+  return await this.fetchArticleById(article_id);
+};
