@@ -115,5 +115,21 @@ describe('/api/articles/:article_id', () => {
 
       expect(msg).toBe('Bad Request. Invalid body');
     });
+    test('status 404: responds with a message', async () => {
+      const article_id = 9999;
+
+      const body = {
+        inc_votes: 1,
+      };
+
+      const {
+        body: { msg },
+      } = await request(app)
+        .patch(`/api/articles/${article_id}`)
+        .send(body)
+        .expect(404);
+
+      expect(msg).toBe('Article Not Found');
+    });
   });
 });
