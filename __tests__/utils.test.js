@@ -6,6 +6,8 @@ const {
   formatComments,
 } = require('../utils');
 
+const { formatArticlesResponse } = require('../utils/models');
+
 describe('formatUsers', () => {
   test('Returns an array', () => {
     expect(Array.isArray(formatUsers())).toBe(true);
@@ -275,7 +277,7 @@ describe('formatArticles', () => {
   });
 });
 
-describe.only('formatComments', () => {
+describe('formatComments', () => {
   test('Returns an array', () => {
     expect(Array.isArray(formatComments())).toBe(true);
   });
@@ -365,5 +367,43 @@ describe.only('formatComments', () => {
         created_at: new Date(1604437200000),
       },
     ]);
+  });
+});
+
+describe.only('formatArticlesResponse', () => {
+  const input = [
+    {
+      article_id: 1,
+      title: 'Living in the shadow of a great man',
+      body: 'I find this existence challenging',
+      votes: 100,
+      topic: 'mitch',
+      author: 'butter_bridge',
+      created_at: new Date('2020-07-09T20:11:00.000Z'),
+      comment_count: '11',
+    },
+  ];
+
+  test('Returns an object if the passed array with a single article', () => {
+    expect(typeof formatArticlesResponse(input)).toBe('object');
+  });
+  test('Returns an array if the passed array with multiple articles', () => {
+    const arr = [1, 2];
+    const result = formatArticlesResponse(arr);
+    expect(Array.isArray(result)).toBe(true);
+  });
+  test('Returns an object formatted correctly when passed an array with a single article', () => {
+    const expected = {
+      author: 'butter_bridge',
+      title: 'Living in the shadow of a great man',
+      article_id: 1,
+      body: 'I find this existence challenging',
+      topic: 'mitch',
+      created_at: '2020-07-09 20:11:00',
+      votes: 100,
+      comment_count: 11,
+    };
+
+    expect(formatArticlesResponse(input)).toEqual(expected);
   });
 });
