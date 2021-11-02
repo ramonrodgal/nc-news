@@ -57,5 +57,12 @@ describe('/api/articles/:article_id', () => {
 
       expect(article).toEqual(articleTest);
     });
+    test('status 400, responds with a message', async () => {
+      const {
+        body: { msg },
+      } = await request(app).get('/api/articles/not-valid-id').expect(400);
+
+      expect(msg).toBe('Bad Request');
+    });
   });
 });
