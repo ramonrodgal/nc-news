@@ -1,5 +1,5 @@
-const { formatArticlesResponse } = require('../models/formatArticlesResponse');
+const { formatArticleResponse } = require('../models/formatArticleResponse');
 
 module.exports = {
-  formatArticlesResponse,
+  formatArticleResponse,
 };

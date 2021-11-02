@@ -6,7 +6,7 @@ const {
   formatComments,
 } = require('../utils');
 
-const { formatArticlesResponse } = require('../utils/models');
+const { formatArticleResponse } = require('../utils/models');
 
 describe('formatUsers', () => {
   test('Returns an array', () => {
@@ -370,29 +370,22 @@ describe('formatComments', () => {
   });
 });
 
-describe('formatArticlesResponse', () => {
-  const input = [
-    {
-      article_id: 1,
-      title: 'Living in the shadow of a great man',
-      body: 'I find this existence challenging',
-      votes: 100,
-      topic: 'mitch',
-      author: 'butter_bridge',
-      created_at: new Date('2020-07-09T20:11:00.000Z'),
-      comment_count: '11',
-    },
-  ];
+describe('formatArticleResponse', () => {
+  const input = {
+    article_id: 1,
+    title: 'Living in the shadow of a great man',
+    body: 'I find this existence challenging',
+    votes: 100,
+    topic: 'mitch',
+    author: 'butter_bridge',
+    created_at: new Date('2020-07-09T20:11:00.000Z'),
+    comment_count: '11',
+  };
 
-  test('Returns an object if the passed array with a single article', () => {
-    expect(typeof formatArticlesResponse(input)).toBe('object');
+  test('Returns an object', () => {
+    expect(typeof formatArticleResponse(input)).toBe('object');
   });
-  test('Returns an array if the passed array with multiple articles', () => {
-    const arr = [1, 2];
-    const result = formatArticlesResponse(arr);
-    expect(Array.isArray(result)).toBe(true);
-  });
-  test('Returns an object formatted correctly when passed an array with a single article', () => {
+  test('Returns an object formatted correctly when passed an article object', () => {
     const expected = {
       author: 'butter_bridge',
       title: 'Living in the shadow of a great man',
@@ -404,6 +397,20 @@ describe('formatArticlesResponse', () => {
       comment_count: 11,
     };
 
-    expect(formatArticlesResponse(input)).toEqual(expected);
+    expect(formatArticleResponse(input)).toEqual(expected);
+  });
+  test('Does not mutate the original data', () => {
+    formatArticleResponse(input);
+
+    expect(input).toEqual({
+      article_id: 1,
+      title: 'Living in the shadow of a great man',
+      body: 'I find this existence challenging',
+      votes: 100,
+      topic: 'mitch',
+      author: 'butter_bridge',
+      created_at: new Date('2020-07-09T20:11:00.000Z'),
+      comment_count: '11',
+    });
   });
 });
