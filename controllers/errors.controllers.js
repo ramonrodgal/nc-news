@@ -19,10 +19,6 @@ exports.handlePsqlErrors = (err, req, res, next) => {
         status: 404,
         msg: 'Not Found',
       },
-      42703: {
-        status: 400,
-        msg: 'Bad Request. Invalid body',
-      },
     };
 
     const error = psqlErrorReferences[err.code];

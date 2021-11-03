@@ -87,18 +87,42 @@ exports.fetchCommentsFromArticle = async (article_id) => {
 exports.insertCommentByArticleId = async (article_id, requestBody) => {
   const { username, body } = requestBody;
 
-  const queryString = `INSERT INTO comments (author, body, article_id) VALUES ($1, $2, $3) RETURNING *;`;
+  const requiredFields = ['username', 'body'];
+  let allFields = true;
+  let allFieldTypes = true;
+  const fieldTypesReference = {
+    username: 'string',
+    body: 'string',
+  };
 
+  for (let requiredField of requiredFields) {
+    if (!requestBody.hasOwnProperty(requiredField)) {
+      allFields = false;
+    }
+    if (
+      fieldTypesReference[requiredField] !== typeof requestBody[requiredField]
+    ) {
+      allFieldTypes = false;
+    }
+  }
+
+  if (!allFields || !allFieldTypes) {
+    return Promise.reject({ status: 400, msg: 'Bad Request. Invalid body' });
+  }
+
+  const queryString = `INSERT INTO comments (author, body, article_id) VALUES ($1, $2, $3) RETURNING *;`;
   const queryParams = [username, body, article_id];
 
   const { rows: user } = await db.query(
-    'SELECT * FROM user WHERE username = $1',
+    'SELECT * FROM users WHERE username = $1',
     [username]
   );
 
   if (user.length === 0) {
-    console.log('Hello');
-    return Promise.reject({ status: 400, msg: 'Bad request. Invalid user' });
+    return Promise.reject({
+      status: 400,
+      msg: 'Bad Request. Invalid username',
+    });
   }
 
   const { rows } = await db.query(queryString, queryParams);
