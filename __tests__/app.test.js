@@ -275,6 +275,14 @@ describe('/api/articles', () => {
 
       expect(msg).toBe('Invalid order query');
     });
+    test.only('status:404 responds with a message for invalid topic', async () => {
+      const topic = 'not-a-topic';
+      const {
+        body: { msg },
+      } = await request(app).get(`/api/articles?topic=${topic}`).expect(404);
+
+      expect(msg).toBe('Articles not found');
+    });
   });
 });
 

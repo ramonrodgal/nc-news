@@ -90,6 +90,10 @@ exports.fetchArticles = async (
 
   const { rows } = await db.query(queryString);
 
+  if (rows.length === 0) {
+    return Promise.reject({ status: 404, msg: 'Articles not found' });
+  }
+
   const articles = rows.map((article) => formatArticleResponse(article));
 
   return articles;
