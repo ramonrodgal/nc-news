@@ -28,7 +28,7 @@ exports.fetchArticleById = async (article_id) => {
 exports.updateArticleById = async (article_id, body) => {
   const { inc_votes } = body;
 
-  if (!inc_votes) {
+  if (!inc_votes || typeof inc_votes !== 'number') {
     return Promise.reject({ status: 400, msg: 'Bad Request. Invalid body' });
   }
 

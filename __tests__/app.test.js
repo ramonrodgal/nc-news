@@ -140,7 +140,7 @@ describe('/api/articles/:article_id', () => {
 
       expect(msg).toBe('Bad Request. Invalid body');
     });
-    test.only('status 400: responds with a message for invalid data type in body', async () => {
+    test('status 400: responds with a message for invalid data type in body', async () => {
       const article_id = 1;
 
       const body = {
@@ -352,6 +352,3 @@ describe('api/comments/:comment_id', () => {
     });
   });
 });
-
-//Invalid comment id
-//comment not found
