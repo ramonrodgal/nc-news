@@ -176,8 +176,8 @@ describe('/api/articles/:article_id', () => {
 });
 
 describe('/api/articles', () => {
-  describe('GET', () => {
-    test('status: 200 responds with all the articles sorted by date', async () => {
+  describe.only('GET', () => {
+    test('status: 200 responds with all the articles sorted by date in desc order (default)', async () => {
       const {
         body: { articles },
       } = await request(app).get('/api/articles').expect(200);
@@ -201,9 +201,9 @@ describe('/api/articles', () => {
 
       console.log(articles);
 
-      expect(articles).toBeSorted({ key: 'created_at' });
+      expect(articles).toBeSorted({ key: 'created_at', descending: true });
     });
-    test.only('status:200 responds with all the articles sorted by any valid colum', async () => {
+    test('status:200 responds with all the articles sorted by any valid colu in desc order(default)', async () => {
       const columns = [
         'article_id',
         'title',
@@ -220,7 +220,7 @@ describe('/api/articles', () => {
           .get(`/api/articles?sort_by=${column}`)
           .expect(200);
 
-        expect(articles).toBeSorted({ key: column });
+        expect(articles).toBeSorted({ key: column, descending: true });
       }
     });
   });

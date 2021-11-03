@@ -49,11 +49,7 @@ exports.updateArticleById = async (article_id, body) => {
   return await this.fetchArticleById(article_id);
 };
 
-exports.fetchArticles = async (sort_by = 'created_at') => {
-  // if (!['age', 'treasure_name', 'cost_at_auction'].includes(sort_by)) {
-  //   return Promise.reject({ status: 400, msg: 'invalid sort_by query' });
-  // }
-
+exports.fetchArticles = async (sort_by = 'created_at', order = 'desc') => {
   const queryString = `
       SELECT 
         articles.*, COUNT(comments.comment_id) AS comment_count
@@ -61,7 +57,7 @@ exports.fetchArticles = async (sort_by = 'created_at') => {
       LEFT JOIN comments 
       ON articles.article_id = comments.article_id
       GROUP BY articles.article_id
-      ORDER BY ${sort_by} ASC`;
+      ORDER BY ${sort_by} ${order}`;
 
   const { rows } = await db.query(queryString);
 
