@@ -124,7 +124,7 @@ describe('/api/articles/:article_id', () => {
 
       expect(article).toEqual(expected);
     });
-    test('status 400: responds with a message', async () => {
+    test('status 400: responds with a message for invalid key in body', async () => {
       const article_id = 1;
 
       const body = {
@@ -140,7 +140,23 @@ describe('/api/articles/:article_id', () => {
 
       expect(msg).toBe('Bad Request. Invalid body');
     });
-    test('status 404: responds with a message', async () => {
+    test.only('status 400: responds with a message for invalid data type in body', async () => {
+      const article_id = 1;
+
+      const body = {
+        inc_votes: 'A lot of votes',
+      };
+
+      const {
+        body: { msg },
+      } = await request(app)
+        .patch(`/api/articles/${article_id}`)
+        .send(body)
+        .expect(400);
+
+      expect(msg).toBe('Bad Request. Invalid body');
+    });
+    test('status 404: responds with a message for invalid article_id', async () => {
       const article_id = 9999;
 
       const body = {
@@ -316,7 +332,7 @@ describe('/api/articles/:article_id/comments', () => {
   });
 });
 
-describe.only('api/comments/:comment_id', () => {
+describe('api/comments/:comment_id', () => {
   describe('DELETE', () => {
     test('status:204 and no content', async () => {
       const comment_id = 1;
@@ -326,13 +342,16 @@ describe.only('api/comments/:comment_id', () => {
 
       expect(body).toEqual({});
     });
+    test('status:404 and a message', async () => {
+      const comment_id = 99999;
+      const {
+        body: { msg },
+      } = await request(app).delete(`/api/comments/${comment_id}`).expect(404);
+
+      expect(msg).toBe('Comment Not Found');
+    });
   });
 });
 
-// DELETE /api/comments/:comment_id
-// Should:
-
-// delete the given comment by comment_id
-// Responds with:
-
-// status 204 and no content
+//Invalid comment id
+//comment not found
