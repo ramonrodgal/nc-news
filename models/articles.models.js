@@ -56,7 +56,8 @@ exports.fetchArticles = async () => {
       FROM articles
       LEFT JOIN comments 
       ON articles.article_id = comments.article_id
-      GROUP BY articles.article_id;`;
+      GROUP BY articles.article_id
+      ORDER BY created_at ASC`;
 
   const { rows } = await db.query(queryString);
 

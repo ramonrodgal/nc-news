@@ -177,7 +177,7 @@ describe('/api/articles/:article_id', () => {
 
 describe('/api/articles', () => {
   describe('GET', () => {
-    test('status: 200 responds with all the articles', async () => {
+    test.only('status: 200 responds with all the articles sorted by date', async () => {
       const {
         body: { articles },
       } = await request(app).get('/api/articles').expect(200);
@@ -198,8 +198,18 @@ describe('/api/articles', () => {
       articles.forEach((article) => {
         expect(article).toEqual(articleTest);
       });
+
+      console.log(articles);
+
+      expect(articles).toBeSorted({ key: 'created_at' });
     });
   });
+
+  // Should accept queries:
+
+  // sort_by, which sorts the articles by any valid column (defaults to date)
+  // order, which can be set to asc or desc for ascending or descending (defaults to descending)
+  // topic, which filters the articles by the topic value specified in the query
 });
 
 describe('/api/articles/:article_id/comments', () => {
