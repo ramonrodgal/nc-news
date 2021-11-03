@@ -13,7 +13,11 @@ exports.fetchUserByUsername = async (username) => {
 
   const queryParams = [username];
 
-  const { rows: user } = await db.query(queryString, queryParams);
+  const { rows } = await db.query(queryString, queryParams);
 
-  return user[0];
+  if (rows.length === 0) {
+    return Promise.reject({ status: 404, msg: 'User not found' });
+  }
+
+  return rows[0];
 };

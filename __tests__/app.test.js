@@ -455,9 +455,9 @@ describe('/api/users', () => {
   });
 });
 
-describe.only('/api/users/:username', () => {
+describe('/api/users/:username', () => {
   describe('GET', () => {
-    test('status:200 respond with a user object in the correct format', async () => {
+    test('status:200 responds with a user object in the correct format', async () => {
       const username = 'butter_bridge';
       const {
         body: { user },
@@ -473,13 +473,13 @@ describe.only('/api/users/:username', () => {
 
       expect(user).toEqual(userTest);
     });
+    test('status:404 responds with a message', async () => {
+      const username = 'Not-a-user';
+      const {
+        body: { msg },
+      } = await request(app).get(`/api/users/${username}`).expect(404);
+
+      expect(msg).toBe('User not found');
+    });
   });
 });
-
-// GET /api/users/:username
-// Responds with:
-
-// a user object which should have the following properties:
-// username
-// avatar_url
-// name
