@@ -13,7 +13,7 @@ exports.handlePsqlErrors = (err, req, res, next) => {
     const psqlErrorReferences = {
       '22P02': {
         status: 400,
-        msg: 'Bad request.',
+        msg: 'Bad Request',
       },
       23503: {
         status: 404,

@@ -227,7 +227,7 @@ describe('/api/articles/:article_id/comments', () => {
       expect(msg).toEqual('Article Not Found');
     });
   });
-  describe.only('POST', () => {
+  describe('POST', () => {
     test('status 200: responds with the posted comment', async () => {
       const article_id = 1;
       const body = {
@@ -316,6 +316,23 @@ describe('/api/articles/:article_id/comments', () => {
   });
 });
 
-describe('api/comments/:comment_id', () => {
-  describe('DELETE', () => {});
+describe.only('api/comments/:comment_id', () => {
+  describe('DELETE', () => {
+    test('status:204 and no content', async () => {
+      const comment_id = 1;
+      const { body } = await request(app)
+        .delete(`/api/comments/${comment_id}`)
+        .expect(204);
+
+      expect(body).toEqual({});
+    });
+  });
 });
+
+// DELETE /api/comments/:comment_id
+// Should:
+
+// delete the given comment by comment_id
+// Responds with:
+
+// status 204 and no content
