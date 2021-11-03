@@ -177,7 +177,7 @@ describe('/api/articles/:article_id', () => {
 
 describe('/api/articles', () => {
   describe.only('GET', () => {
-    test('status: 200 responds with all the articles sorted by date in desc order (default)', async () => {
+    test('status:200 responds with all the articles sorted by date in desc order (default)', async () => {
       const {
         body: { articles },
       } = await request(app).get('/api/articles').expect(200);
@@ -259,13 +259,21 @@ describe('/api/articles', () => {
         expect(article.topic).toBe(topic);
       });
     });
-    test.only('status:400 responds with a message for invalid sort_by column', async () => {
+    test('status:400 responds with a message for invalid sort_by column', async () => {
       const column = 'not_valid_column';
       const {
         body: { msg },
       } = await request(app).get(`/api/articles?sort_by=${column}`).expect(400);
 
       expect(msg).toBe('Invalid sort_by query');
+    });
+    test('status:400 responds with a message for invalid order query', async () => {
+      const order = 'not_valid';
+      const {
+        body: { msg },
+      } = await request(app).get(`/api/articles?order=${order}`);
+
+      expect(msg).toBe('Invalid order query');
     });
   });
 });

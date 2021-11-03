@@ -55,11 +55,22 @@ exports.fetchArticles = async (
   topic
 ) => {
   if (
-    !['article_id', 'title', 'votes', 'topic', 'author', 'created_at'].includes(
-      sort_by
-    )
+    ![
+      'article_id',
+      'title',
+      'votes',
+      'body',
+      'topic',
+      'author',
+      'created_at',
+      'comment_count',
+    ].includes(sort_by)
   ) {
     return Promise.reject({ status: 400, msg: 'Invalid sort_by query' });
+  }
+
+  if (!['asc', 'desc'].includes(order)) {
+    return Promise.reject({ status: 400, msg: 'Invalid order query' });
   }
 
   let queryString = `
@@ -74,6 +85,8 @@ exports.fetchArticles = async (
   }
 
   queryString += ` GROUP BY articles.article_id ORDER BY ${sort_by} ${order}`;
+
+  console.log(queryString);
 
   const { rows } = await db.query(queryString);
 
