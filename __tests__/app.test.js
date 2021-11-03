@@ -462,6 +462,35 @@ describe('api/comments/:comment_id', () => {
 
       expect(comment.votes).toBe(15);
     });
+    test('status 400 respond with a message for invalid key in body', async () => {
+      const comment_id = 1;
+      const body = {
+        notValid: 200,
+      };
+      const {
+        body: { msg },
+      } = await request(app)
+        .patch(`/api/comments/${comment_id}`)
+        .send(body)
+        .expect(400);
+
+      expect(msg).toBe('Bad Request. Invalid body');
+    });
+    test('status 400: responds with a message for invalid data type in body', async () => {
+      const comment_id = 1;
+      const body = {
+        inc_votes: 'A lot of votes',
+      };
+      const {
+        body: { msg },
+      } = await request(app)
+        .patch(`/api/comments/${comment_id}`)
+        .send(body)
+        .expect(400);
+
+      expect(msg).toBe('Bad Request. Invalid body');
+    });
+    test.skip('status 400: responds with a message for invalid article_id', async () => {});
   });
 });
 
