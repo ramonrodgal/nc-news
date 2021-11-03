@@ -35,6 +35,24 @@ describe('/api/topics', () => {
       });
     });
   });
+  describe.only('POST', () => {
+    test('status:200 responds with the added topic', async () => {
+      const body = {
+        slug: 'topic name here',
+        description: 'description here',
+      };
+      const {
+        body: { topic },
+      } = await request(app).post('/api/topics').send(body).expect(201);
+
+      const topicTest = {
+        description: expect.any(String),
+        slug: expect.any(String),
+      };
+
+      expect(topic).toEqual(topicTest);
+    });
+  });
 });
 
 describe('/api/articles/:article_id', () => {
@@ -282,6 +300,30 @@ describe('/api/articles', () => {
       expect(msg).toBe('Articles not found');
     });
   });
+  describe.skip('POST', () => {
+    test('status 201: responds with the added article', async () => {
+      const body = {
+        author: 'lurker',
+        title: 'I love bananas',
+        body: 'Lorem ipsum dolor sit amet. Jungle jungle monkey banana banana!',
+        topic: 'mitch',
+      };
+      const {
+        body: { article },
+      } = await request(app).post('/api/articles').send(body).expect(201);
+
+      const articleTest = {
+        author: expect.any(String),
+        title: expect.any(String),
+        article_id: expect.any(Number),
+        body: expect.any(String),
+        topic: expect.any(String),
+        created_at: expect.any(String),
+        votes: expect.any(Number),
+        comment_count: expect.any(Number),
+      };
+    });
+  });
 });
 
 describe('/api/articles/:article_id/comments', () => {
@@ -433,7 +475,7 @@ describe('api/comments/:comment_id', () => {
       expect(msg).toBe('Comment Not Found');
     });
   });
-  describe.only('PATCH', () => {
+  describe('PATCH', () => {
     test('status 200 and respond with the updated comment with the votes increased', async () => {
       const comment_id = 1;
       const body = {
@@ -540,8 +582,6 @@ describe('/api/users/:username', () => {
         avatar_url: expect.any(String),
         name: expect.any(String),
       };
-
-      console.log(user);
 
       expect(user).toEqual(userTest);
     });
