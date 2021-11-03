@@ -86,8 +86,6 @@ exports.fetchArticles = async (
 
   queryString += ` GROUP BY articles.article_id ORDER BY ${sort_by} ${order}`;
 
-  console.log(queryString);
-
   const { rows } = await db.query(queryString);
 
   if (rows.length === 0) {

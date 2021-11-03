@@ -176,7 +176,7 @@ describe('/api/articles/:article_id', () => {
 });
 
 describe('/api/articles', () => {
-  describe.only('GET', () => {
+  describe('GET', () => {
     test('status:200 responds with all the articles sorted by date in desc order (default)', async () => {
       const {
         body: { articles },
@@ -198,8 +198,6 @@ describe('/api/articles', () => {
       articles.forEach((article) => {
         expect(article).toEqual(articleTest);
       });
-
-      console.log(articles);
 
       expect(articles).toBeSorted({ key: 'created_at', descending: true });
     });
@@ -275,7 +273,7 @@ describe('/api/articles', () => {
 
       expect(msg).toBe('Invalid order query');
     });
-    test.only('status:404 responds with a message for invalid topic', async () => {
+    test('status:404 responds with a message for invalid topic', async () => {
       const topic = 'not-a-topic';
       const {
         body: { msg },
@@ -436,3 +434,27 @@ describe('api/comments/:comment_id', () => {
     });
   });
 });
+
+describe.only('/api/users', () => {
+  describe('GET', () => {
+    test('status 200: responds with an array of user objects', async () => {
+      const {
+        body: { users },
+      } = await request(app).get('/api/users').expect(200);
+
+      expect(users.length).toBe(4);
+
+      const userTest = {
+        username: expect.any(String),
+      };
+
+      users.forEach((user) => {
+        expect(user).toEqual(userTest);
+      });
+    });
+  });
+});
+
+// Responds with:
+// an array of objects, each object should have the following property:
+// username
