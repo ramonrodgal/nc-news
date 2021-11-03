@@ -12,3 +12,17 @@ exports.removeCommentById = async (comment_id) => {
 
   return;
 };
+
+exports.updateCommentById = async (comment_id, inc_votes) => {
+  const queryString = `
+    UPDATE comments
+    SET votes = votes + $1
+    WHERE comment_id = $2
+    RETURNING *`;
+
+  const queryParams = [inc_votes, comment_id];
+
+  const { rows } = await db.query(queryString, queryParams);
+
+  return rows[0];
+};

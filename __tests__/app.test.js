@@ -433,6 +433,22 @@ describe('api/comments/:comment_id', () => {
       expect(msg).toBe('Comment Not Found');
     });
   });
+  describe.only('PATCH', () => {
+    test('status 200 and respond with the updated comment with the votes increased', async () => {
+      const comment_id = 1;
+      const body = {
+        inc_votes: 1,
+      };
+      const {
+        body: { comment },
+      } = await request(app)
+        .patch(`/api/comments/${comment_id}`)
+        .send(body)
+        .expect(200);
+
+      expect(comment.votes).toBe(17);
+    });
+  });
 });
 
 describe('/api/users', () => {
