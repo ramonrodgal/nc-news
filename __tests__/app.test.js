@@ -435,7 +435,7 @@ describe('api/comments/:comment_id', () => {
   });
 });
 
-describe.only('/api/users', () => {
+describe('/api/users', () => {
   describe('GET', () => {
     test('status 200: responds with an array of user objects', async () => {
       const {
@@ -455,6 +455,31 @@ describe.only('/api/users', () => {
   });
 });
 
+describe.only('/api/users/:username', () => {
+  describe('GET', () => {
+    test('status:200 respond with a user object in the correct format', async () => {
+      const username = 'butter_bridge';
+      const {
+        body: { user },
+      } = await request(app).get(`/api/users/${username}`);
+
+      const userTest = {
+        username: expect.any(String),
+        avatar_url: expect.any(String),
+        name: expect.any(String),
+      };
+
+      console.log(user);
+
+      expect(user).toEqual(userTest);
+    });
+  });
+});
+
+// GET /api/users/:username
 // Responds with:
-// an array of objects, each object should have the following property:
+
+// a user object which should have the following properties:
 // username
+// avatar_url
+// name
