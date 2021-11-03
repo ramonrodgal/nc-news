@@ -252,5 +252,29 @@ describe('/api/articles/:article_id/comments', () => {
 
       expect(comment).toEqual(expected);
     });
+    test('status 400: responds with a message', async () => {
+      const article_id = 9999;
+      const body = {
+        username: 'butter_bridge',
+        body: 'I like bananas!',
+      };
+
+      const {
+        body: { msg },
+      } = await request(app)
+        .post(`/api/articles/${article_id}/comments`)
+        .send(body)
+        .expect(404);
+
+      expect(msg).toBe('Not Found');
+    });
+    //Bad Request. Invalid body
+    //Invalid user
+    //Invalid body
+    //Article not found
   });
+});
+
+describe('api/comments/:comment_id', () => {
+  describe('DELETE', () => {});
 });

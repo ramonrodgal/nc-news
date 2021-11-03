@@ -52,7 +52,11 @@ exports.postCommentByArticleId = async (req, res, next) => {
   const { article_id } = req.params;
   const { body: requestBody } = req;
 
-  const comment = await insertCommentByArticleId(article_id, requestBody);
+  try {
+    const comment = await insertCommentByArticleId(article_id, requestBody);
 
-  res.status(200).send({ comment });
+    res.status(200).send({ comment });
+  } catch (err) {
+    next(err);
+  }
 };

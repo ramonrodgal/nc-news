@@ -7,13 +7,25 @@ exports.handleCustomErrors = (err, req, res, next) => {
 };
 
 exports.handlePsqlErrors = (err, req, res, next) => {
-  if (err.code === '22P02') {
-    res.status(400).send({ msg: 'Bad Request' });
+  if (err.code) {
+    const psqlErrorReferences = {
+      '22P02': {
+        status: 400,
+        msg: 'Bad request.',
+      },
+      23503: {
+        status: 404,
+        msg: 'Not Found',
+      },
+    };
+
+    const error = psqlErrorReferences[err.code];
+
+    res.status(error.status).send({ msg: error.msg });
   } else {
     next(err);
   }
 };
-
 exports.handle500Errors = (err, req, res, next) => {
   console.log(err);
   res.status(500).send({ msg: 'Internal Server Error' });
