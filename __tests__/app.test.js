@@ -448,6 +448,20 @@ describe('api/comments/:comment_id', () => {
 
       expect(comment.votes).toBe(17);
     });
+    test('status 200 and respond with the updated comment with the votes decreased', async () => {
+      const comment_id = 1;
+      const body = {
+        inc_votes: -1,
+      };
+      const {
+        body: { comment },
+      } = await request(app)
+        .patch(`/api/comments/${comment_id}`)
+        .send(body)
+        .expect(200);
+
+      expect(comment.votes).toBe(15);
+    });
   });
 });
 
