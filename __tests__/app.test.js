@@ -177,7 +177,7 @@ describe('/api/articles/:article_id', () => {
 
 describe('/api/articles', () => {
   describe('GET', () => {
-    test.only('status: 200 responds with all the articles sorted by date', async () => {
+    test('status: 200 responds with all the articles sorted by date', async () => {
       const {
         body: { articles },
       } = await request(app).get('/api/articles').expect(200);
@@ -202,6 +202,26 @@ describe('/api/articles', () => {
       console.log(articles);
 
       expect(articles).toBeSorted({ key: 'created_at' });
+    });
+    test.only('status:200 responds with all the articles sorted by any valid colum', async () => {
+      const columns = [
+        'article_id',
+        'title',
+        'body',
+        'votes',
+        'topic',
+        'author',
+        'created_at',
+        'comment_count',
+      ];
+
+      for (let column of columns) {
+        const { body: articles } = await request(app)
+          .get(`/api/articles?sort_by=${column}`)
+          .expect(200);
+
+        expect(articles).toBeSorted({ key: column });
+      }
     });
   });
 
