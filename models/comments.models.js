@@ -31,7 +31,7 @@ exports.updateCommentById = async (comment_id, body) => {
   const { rows } = await db.query(queryString, queryParams);
 
   if (rows.length === 0) {
-    return Promise.reject({ status: 404, msg: 'Article Not Found' });
+    return Promise.reject({ status: 404, msg: 'Comment not found' });
   }
 
   return rows[0];

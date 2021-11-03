@@ -490,7 +490,20 @@ describe('api/comments/:comment_id', () => {
 
       expect(msg).toBe('Bad Request. Invalid body');
     });
-    test.skip('status 400: responds with a message for invalid article_id', async () => {});
+    test('status 404: responds with a message for invalid article_id', async () => {
+      const comment_id = 9999;
+      const body = {
+        inc_votes: 20,
+      };
+      const {
+        body: { msg },
+      } = await request(app)
+        .patch(`/api/comments/${comment_id}`)
+        .send(body)
+        .expect(404);
+
+      expect(msg).toBe('Comment not found');
+    });
   });
 });
 
