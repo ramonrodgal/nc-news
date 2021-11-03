@@ -223,7 +223,7 @@ describe('/api/articles', () => {
         expect(articles).toBeSorted({ key: column, descending: true });
       }
     });
-    test.only('status:200 responds with all the articles ordered by order provided', async () => {
+    test('status:200 responds with all the articles ordered by order provided', async () => {
       const orders = ['asc', 'desc'];
       const columns = [
         'article_id',
@@ -248,6 +248,16 @@ describe('/api/articles', () => {
           });
         }
       }
+    });
+    test('status:200 responds with all the articles filtered by topic', async () => {
+      const topic = 'mitch';
+      const {
+        body: { articles },
+      } = await request(app).get(`/api/articles?topic=${topic}`);
+
+      articles.forEach((article) => {
+        expect(article.topic).toBe(topic);
+      });
     });
   });
 });
