@@ -203,7 +203,7 @@ describe('/api/articles', () => {
 
       expect(articles).toBeSorted({ key: 'created_at', descending: true });
     });
-    test('status:200 responds with all the articles sorted by any valid colu in desc order(default)', async () => {
+    test('status:200 responds with all the articles sorted by any valid column in desc order(default)', async () => {
       const columns = [
         'article_id',
         'title',
@@ -258,6 +258,14 @@ describe('/api/articles', () => {
       articles.forEach((article) => {
         expect(article.topic).toBe(topic);
       });
+    });
+    test.only('status:400 responds with a message for invalid sort_by column', async () => {
+      const column = 'not_valid_column';
+      const {
+        body: { msg },
+      } = await request(app).get(`/api/articles?sort_by=${column}`).expect(400);
+
+      expect(msg).toBe('Invalid sort_by query');
     });
   });
 });

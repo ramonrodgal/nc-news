@@ -54,6 +54,14 @@ exports.fetchArticles = async (
   order = 'desc',
   topic
 ) => {
+  if (
+    !['article_id', 'title', 'votes', 'topic', 'author', 'created_at'].includes(
+      sort_by
+    )
+  ) {
+    return Promise.reject({ status: 400, msg: 'Invalid sort_by query' });
+  }
+
   let queryString = `
       SELECT 
         articles.*, COUNT(comments.comment_id) AS comment_count
