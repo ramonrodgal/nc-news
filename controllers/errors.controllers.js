@@ -7,6 +7,8 @@ exports.handleCustomErrors = (err, req, res, next) => {
 };
 
 exports.handlePsqlErrors = (err, req, res, next) => {
+  console.log(err);
+
   if (err.code) {
     const psqlErrorReferences = {
       '22P02': {
@@ -16,6 +18,10 @@ exports.handlePsqlErrors = (err, req, res, next) => {
       23503: {
         status: 404,
         msg: 'Not Found',
+      },
+      42703: {
+        status: 400,
+        msg: 'Bad Request. Invalid body',
       },
     };
 

@@ -252,7 +252,7 @@ describe('/api/articles/:article_id/comments', () => {
 
       expect(comment).toEqual(expected);
     });
-    test('status 400: responds with a message', async () => {
+    test('status 400: responds with a message for invalid article_id', async () => {
       const article_id = 9999;
       const body = {
         username: 'butter_bridge',
@@ -268,10 +268,21 @@ describe('/api/articles/:article_id/comments', () => {
 
       expect(msg).toBe('Not Found');
     });
-    //Bad Request. Invalid body
-    //Invalid user
-    //Invalid body
-    //Article not found
+    test.only('status 400: responds with a message', async () => {
+      const article_id = 1;
+      const body = {
+        username: 'not-a-user',
+        body: "I'm not in the database",
+      };
+      const {
+        body: { msg },
+      } = await request(app)
+        .post(`/api/articles/${article_id}/comments`)
+        .send(body)
+        .expect(400);
+
+      expect(msg).toEqual('Bad Request. Invalid body');
+    });
   });
 });
 

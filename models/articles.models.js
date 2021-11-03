@@ -91,6 +91,16 @@ exports.insertCommentByArticleId = async (article_id, requestBody) => {
 
   const queryParams = [username, body, article_id];
 
+  const { rows: user } = await db.query(
+    'SELECT * FROM user WHERE username = $1',
+    [username]
+  );
+
+  if (user.length === 0) {
+    console.log('Hello');
+    return Promise.reject({ status: 400, msg: 'Bad request. Invalid user' });
+  }
+
   const { rows } = await db.query(queryString, queryParams);
 
   comment = formatCommentResponse(rows[0]);
