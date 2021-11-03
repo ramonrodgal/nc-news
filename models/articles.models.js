@@ -50,6 +50,8 @@ exports.updateArticleById = async (article_id, body) => {
 };
 
 exports.fetchArticles = async (sort_by = 'created_at', order = 'desc') => {
+  console.log(order);
+
   const queryString = `
       SELECT 
         articles.*, COUNT(comments.comment_id) AS comment_count

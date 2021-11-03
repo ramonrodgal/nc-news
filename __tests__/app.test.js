@@ -223,13 +223,33 @@ describe('/api/articles', () => {
         expect(articles).toBeSorted({ key: column, descending: true });
       }
     });
+    test.only('status:200 responds with all the articles ordered by order provided', async () => {
+      const orders = ['asc', 'desc'];
+      const columns = [
+        'article_id',
+        'title',
+        'votes',
+        'topic',
+        'author',
+        'created_at',
+      ];
+
+      for (let order of orders) {
+        for (let column of columns) {
+          const {
+            body: { articles },
+          } = await request(app)
+            .get(`/api/articles?sort_by=${column}&order=${order}`)
+            .expect(200);
+
+          expect(articles).toBeSorted({
+            key: column,
+            descending: order === 'desc',
+          });
+        }
+      }
+    });
   });
-
-  // Should accept queries:
-
-  // sort_by, which sorts the articles by any valid column (defaults to date)
-  // order, which can be set to asc or desc for ascending or descending (defaults to descending)
-  // topic, which filters the articles by the topic value specified in the query
 });
 
 describe('/api/articles/:article_id/comments', () => {
