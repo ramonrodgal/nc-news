@@ -288,7 +288,7 @@ describe('/api/articles/:article_id', () => {
   });
 });
 
-describe('/api/articles', () => {
+describe.only('/api/articles', () => {
   describe('GET', () => {
     test('status:200 responds with all the articles sorted by date in desc order (default)', async () => {
       const {
@@ -395,10 +395,11 @@ describe('/api/articles', () => {
       expect(msg).toBe('Articles not found');
     });
     test('status:200 responds with empty object for topic without articles', async () => {
-      const { body } = await request(app)
-        .get('/api/articles?topic=paper')
-        .expect(200);
-      console.log(body);
+      const {
+        body: { articles },
+      } = await request(app).get('/api/articles?topic=paper').expect(200);
+
+      expect(articles).toEqual([]);
     });
   });
   describe.skip('POST', () => {
@@ -615,7 +616,7 @@ describe('api/comments/:comment_id', () => {
 
       expect(comment.votes).toBe(15);
     });
-    test.only('status 200 and respond with unchanged comment when no inc_votes is provided in the request body', async () => {
+    test('status 200 and respond with unchanged comment when no inc_votes is provided in the request body', async () => {
       const comment_id = 1;
       const body = {};
       const {

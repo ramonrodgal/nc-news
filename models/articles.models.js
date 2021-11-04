@@ -1,6 +1,5 @@
 const db = require('../db/connection.js');
 const { formatCommentResponse } = require('../utils');
-const { fetchUsersByUsername } = require('../models/users.models');
 
 exports.fetchArticleById = async (article_id) => {
   const queryStr = `
@@ -92,6 +91,14 @@ exports.fetchArticles = async (
   const { rows } = await db.query(queryString);
 
   if (rows.length === 0) {
+    if (topic) {
+      const { rows } = await db.query('SELECT * FROM topics WHERE slug = $1', [
+        topic,
+      ]);
+      if (rows.length > 0) {
+        return [];
+      }
+    }
     return Promise.reject({ status: 404, msg: 'Articles not found' });
   }
 
