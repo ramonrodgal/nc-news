@@ -4,6 +4,7 @@ const {
   formatDate,
   formatArticles,
   formatComments,
+  formatCommentResponse,
 } = require('../utils');
 
 describe('formatUsers', () => {
@@ -365,5 +366,39 @@ describe('formatComments', () => {
         created_at: new Date(1604437200000),
       },
     ]);
+  });
+});
+describe('formatCommentResponse', () => {
+  const input = {
+    comment_id: 4,
+    votes: -100,
+    created_at: '2020-02-23T12:01:00.000Z',
+    author: 'icellusedkars',
+    body: ' I carry a log — yes. Is it funny to you? It is not to me.',
+  };
+
+  test('Returns an object', () => {
+    expect(typeof formatCommentResponse(input)).toBe('object');
+  });
+  test('Returns an object correctly formatted when passed a comment object', () => {
+    const expected = {
+      comment_id: 4,
+      votes: -100,
+      created_at: expect.any(String),
+      author: 'icellusedkars',
+      body: ' I carry a log — yes. Is it funny to you? It is not to me.',
+    };
+
+    expect(formatCommentResponse(input)).toEqual(expected);
+  });
+  test('Does not mutate the original input', () => {
+    formatCommentResponse(input);
+    expect(input).toEqual({
+      comment_id: 4,
+      votes: -100,
+      created_at: expect.any(String),
+      author: 'icellusedkars',
+      body: ' I carry a log — yes. Is it funny to you? It is not to me.',
+    });
   });
 });

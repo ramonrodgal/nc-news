@@ -3,6 +3,7 @@ const { formatTopics } = require('../utils/formatTopics');
 const { formatDate } = require('../utils/formatDate');
 const { formatArticles } = require('../utils/formatArticles');
 const { formatComments } = require('./formatComments');
+const { formatCommentResponse } = require('./formatCommentResponse');
 
 module.exports = {
   formatUsers,
@@ -10,4 +11,5 @@ module.exports = {
   formatDate,
   formatArticles,
   formatComments,
+  formatCommentResponse,
 };

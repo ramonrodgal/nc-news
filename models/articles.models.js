@@ -1,4 +1,5 @@
 const db = require('../db/connection.js');
+const { formatCommentResponse } = require('../utils');
 
 exports.fetchArticleById = async (article_id) => {
   const queryStr = `
@@ -91,8 +92,6 @@ exports.fetchArticles = async (
   return rows;
 };
 
-///REMOVE FORMART ARTICLES
-
 exports.insertArticle = async (requestBody) => {
   const { author, title, body, topic } = requestBody;
 
@@ -169,9 +168,7 @@ exports.insertCommentByArticleId = async (article_id, requestBody) => {
 
   const { rows } = await db.query(queryString, queryParams);
 
-  comment = formatCommentResponse(rows[0]);
-
-  return comment;
+  return formatCommentResponse(rows[0]);
 };
 
 exports.removeArticleById = async (article_id) => {
