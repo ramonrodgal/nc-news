@@ -124,6 +124,10 @@ exports.fetchCommentsFromArticle = async (article_id) => {
   const { rows } = await db.query(queryString, queryParams);
 
   if (rows.length === 0) {
+    const article = await this.fetchArticleById(article_id);
+    if (article) {
+      return [];
+    }
     return Promise.reject({ status: 404, msg: 'Article Not Found' });
   }
 
