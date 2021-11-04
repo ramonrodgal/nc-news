@@ -108,8 +108,6 @@ describe('/api/articles/:article_id', () => {
         comment_count: expect.any(Number),
       };
 
-      console.log(article);
-
       expect(article).toEqual(articleTest);
     });
     test('status 400, responds with a message', async () => {
@@ -176,6 +174,27 @@ describe('/api/articles/:article_id', () => {
         comment_count: 11,
       };
 
+      expect(article).toEqual(expected);
+    });
+    test('status 400: responds with the same article for empty body', async () => {
+      const article_id = 1;
+      const requestBody = {};
+      const {
+        body: { article },
+      } = await request(app).patch(`/api/articles/${article_id}`).expect(400);
+
+      const expected = {
+        author: 'butter_bridge',
+        title: 'Living in the shadow of a great man',
+        article_id: 1,
+        body: 'I find this existence challenging',
+        topic: 'mitch',
+        created_at: expect.any(String),
+        votes: 100,
+        comment_count: 11,
+      };
+
+      console.log(article);
       expect(article).toEqual(expected);
     });
     test('status 400: responds with a message for invalid key in body', async () => {
