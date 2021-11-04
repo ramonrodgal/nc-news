@@ -213,7 +213,27 @@ describe('/api/articles/:article_id', () => {
       expect(msg).toBe('Article Not Found');
     });
   });
+  describe.only('DELETE', () => {
+    test('status: 204 and responds with no content', async () => {
+      const article_id = 1;
+      const { body } = await request(app)
+        .delete(`/api/articles/${article_id}`)
+        .expect(204);
+
+      expect(body).toEqual({});
+    });
+  });
 });
+
+// #### DELETE /api/articles/:article_id
+
+// Should:
+
+// - delete the given article by article_id
+
+// Respond with:
+
+// - status 204 and no content
 
 describe('/api/articles', () => {
   describe('GET', () => {

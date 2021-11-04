@@ -2,8 +2,10 @@ const {
   fetchArticleById,
   updateArticleById,
   fetchArticles,
+  insertArticle,
   fetchCommentsFromArticle,
   insertCommentByArticleId,
+  removeArticleById,
 } = require('../models/articles.models');
 
 exports.getArticleById = async (req, res, next) => {
@@ -40,6 +42,17 @@ exports.getArticles = async (req, res, next) => {
   }
 };
 
+exports.postArticle = async (req, res, next) => {
+  const { body: requestBody } = req;
+
+  try {
+    const comment = await insertArticle(requestBody);
+    res.status(201).send({ comment });
+  } catch (err) {
+    next(err);
+  }
+};
+
 exports.getCommentsFromArticle = async (req, res, next) => {
   const { article_id } = req.params;
   try {
@@ -58,6 +71,17 @@ exports.postCommentByArticleId = async (req, res, next) => {
     const comment = await insertCommentByArticleId(article_id, requestBody);
 
     res.status(200).send({ comment });
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.deleteArticleById = async (req, res, next) => {
+  const { article_id } = req.params;
+
+  try {
+    await removeArticleById(article_id);
+    res.sendStatus(204);
   } catch (err) {
     next(err);
   }

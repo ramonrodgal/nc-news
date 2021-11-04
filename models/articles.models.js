@@ -40,9 +40,9 @@ exports.updateArticleById = async (article_id, body) => {
 
   let queryParams = [inc_votes, article_id];
 
-  const response = await db.query(queryString, queryParams);
+  const { rows } = await db.query(queryString, queryParams);
 
-  if (response.rows.length === 0) {
+  if (rows.length === 0) {
     return Promise.reject({ status: 404, msg: 'Article Not Found' });
   }
 
@@ -95,6 +95,22 @@ exports.fetchArticles = async (
   const articles = rows.map((article) => formatArticleResponse(article));
 
   return articles;
+};
+
+exports.insertArticle = async (requestBody) => {
+  const { author, title, body, topic } = requestBody;
+
+  let queryString = `
+    INSERT INTO articles 
+      (title, topic, author, body)
+    VALUES
+      ($1, $2, $3, $4)
+    RETURNING article_id`;
+
+  let queryParams = [title, topic, author, body];
+
+  const { rows } = await db.query(queryString, queryParams);
+  const article_id = rows[0].article_id;
 };
 
 exports.fetchCommentsFromArticle = async (article_id) => {
@@ -162,4 +178,16 @@ exports.insertCommentByArticleId = async (article_id, requestBody) => {
   comment = formatCommentResponse(rows[0]);
 
   return comment;
+};
+
+exports.removeArticleById = async (article_id) => {
+  const queryString = `
+    DELETE FROM articles
+    WHERE article_id = $1
+    RETURNING *`;
+
+  const queryParams = [article_id];
+
+  const { rows } = await db.query(queryString, queryParams);
+  return;
 };
