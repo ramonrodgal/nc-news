@@ -6,11 +6,6 @@ const {
   formatComments,
 } = require('../utils');
 
-const {
-  formatArticleResponse,
-  formatCommentResponse,
-} = require('../utils/models');
-
 describe('formatUsers', () => {
   test('Returns an array', () => {
     expect(Array.isArray(formatUsers())).toBe(true);
@@ -370,85 +365,5 @@ describe('formatComments', () => {
         created_at: new Date(1604437200000),
       },
     ]);
-  });
-});
-
-describe('formatArticleResponse', () => {
-  const input = {
-    article_id: 1,
-    title: 'Living in the shadow of a great man',
-    body: 'I find this existence challenging',
-    votes: 100,
-    topic: 'mitch',
-    author: 'butter_bridge',
-    created_at: new Date('2020-07-09T20:11:00.000Z'),
-    comment_count: '11',
-  };
-
-  test('Returns an object', () => {
-    expect(typeof formatArticleResponse(input)).toBe('object');
-  });
-  test('Returns an object formatted correctly when passed an article object', () => {
-    const expected = {
-      author: 'butter_bridge',
-      title: 'Living in the shadow of a great man',
-      article_id: 1,
-      body: 'I find this existence challenging',
-      topic: 'mitch',
-      created_at: '2020-07-09 20:11:00',
-      votes: 100,
-      comment_count: 11,
-    };
-
-    expect(formatArticleResponse(input)).toEqual(expected);
-  });
-  test('Does not mutate the original data', () => {
-    formatArticleResponse(input);
-
-    expect(input).toEqual({
-      article_id: 1,
-      title: 'Living in the shadow of a great man',
-      body: 'I find this existence challenging',
-      votes: 100,
-      topic: 'mitch',
-      author: 'butter_bridge',
-      created_at: new Date('2020-07-09T20:11:00.000Z'),
-      comment_count: '11',
-    });
-  });
-});
-
-describe('formatCommentResponse', () => {
-  const input = {
-    comment_id: 4,
-    votes: -100,
-    created_at: new Date('2020-02-23T12:01:00.000Z'),
-    author: 'icellusedkars',
-    body: ' I carry a log — yes. Is it funny to you? It is not to me.',
-  };
-
-  test('Returns an object', () => {
-    expect(typeof formatCommentResponse(input)).toBe('object');
-  });
-  test('Returns an object correctly formatted when passed a comment object', () => {
-    const expected = {
-      comment_id: 4,
-      votes: -100,
-      created_at: '2020-02-23 12:01:00',
-      author: 'icellusedkars',
-      body: ' I carry a log — yes. Is it funny to you? It is not to me.',
-    };
-
-    expect(formatCommentResponse(input)).toEqual(expected);
-  });
-  test('Does not mutate the original input', () => {
-    formatCommentResponse(input);
-    expect(input).toEqual({
-      comment_id: 4,
-      votes: -100,
-      created_at: new Date('2020-02-23T12:01:00.000Z'),
-      author: 'icellusedkars',
-      body: ' I carry a log — yes. Is it funny to you? It is not to me.',
-    });
   });
 });
