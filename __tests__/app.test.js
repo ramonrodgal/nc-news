@@ -63,6 +63,17 @@ describe('/api/topics', () => {
 
       expect(msg).toBe('Bad request. Invalid body');
     });
+    test('status:400 responds with a message for invalid data type', async () => {
+      const body = {
+        slug: 255,
+        description: 'description here',
+      };
+      const {
+        body: { msg },
+      } = await request(app).post('/api/topics').send(body).expect(400);
+
+      expect(msg).toBe('Bad request. Invalid body');
+    });
   });
 });
 
