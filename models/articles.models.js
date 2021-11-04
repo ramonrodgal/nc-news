@@ -71,7 +71,7 @@ exports.fetchArticles = async (
 
   let queryString = `
       SELECT 
-        articles.*, COUNT(comments.comment_id) AS comment_count
+        articles.*, CAST(COUNT(comments.comment_id)AS INTEGER) AS comment_count
       FROM articles
       LEFT JOIN comments 
       ON articles.article_id = comments.article_id`;
