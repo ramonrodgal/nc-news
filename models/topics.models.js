@@ -14,7 +14,7 @@ exports.insertTopic = async (body) => {
     typeof slug !== 'string' ||
     typeof slug !== 'string'
   ) {
-    return Promise.reject({ status: 400, msg: 'Bad request. Invalid body' });
+    return Promise.reject({ status: 400, msg: 'Bad Request. Invalid Body' });
   }
 
   const queryString = `

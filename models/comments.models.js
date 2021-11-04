@@ -27,7 +27,7 @@ exports.updateCommentById = async (comment_id, body) => {
   }
 
   if (!inc_votes || typeof inc_votes !== 'number') {
-    return Promise.reject({ status: 400, msg: 'Bad Request. Invalid body' });
+    return Promise.reject({ status: 400, msg: 'Bad Request. Invalid Body' });
   }
 
   const queryString = `
@@ -41,7 +41,7 @@ exports.updateCommentById = async (comment_id, body) => {
   const { rows } = await db.query(queryString, queryParams);
 
   if (rows.length === 0) {
-    return Promise.reject({ status: 404, msg: 'Comment not found' });
+    return Promise.reject({ status: 404, msg: 'Comment Not Found' });
   }
 
   return rows[0];

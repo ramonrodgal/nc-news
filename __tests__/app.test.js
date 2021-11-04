@@ -73,7 +73,7 @@ describe('/api/topics', () => {
         body: { msg },
       } = await request(app).post('/api/topics').send(body).expect(400);
 
-      expect(msg).toBe('Bad request. Invalid body');
+      expect(msg).toBe('Bad Request. Invalid Body');
     });
     test('status:400 responds with a message for invalid data type', async () => {
       const body = {
@@ -84,7 +84,7 @@ describe('/api/topics', () => {
         body: { msg },
       } = await request(app).post('/api/topics').send(body).expect(400);
 
-      expect(msg).toBe('Bad request. Invalid body');
+      expect(msg).toBe('Bad Request. Invalid Body');
     });
   });
 });
@@ -194,7 +194,6 @@ describe('/api/articles/:article_id', () => {
         comment_count: 11,
       };
 
-      console.log(article);
       expect(article).toEqual(expected);
     });
     test('status 400: responds with a message for invalid key in body', async () => {
@@ -211,7 +210,7 @@ describe('/api/articles/:article_id', () => {
         .send(body)
         .expect(400);
 
-      expect(msg).toBe('Bad Request. Invalid body');
+      expect(msg).toBe('Bad Request. Invalid Body');
     });
     test('status 400: responds with a message for invalid data type in body', async () => {
       const article_id = 1;
@@ -227,7 +226,7 @@ describe('/api/articles/:article_id', () => {
         .send(body)
         .expect(400);
 
-      expect(msg).toBe('Bad Request. Invalid body');
+      expect(msg).toBe('Bad Request. Invalid Body');
     });
     test('status 404: responds with a message for article not found', async () => {
       const article_id = 9999;
@@ -275,7 +274,7 @@ describe('/api/articles/:article_id', () => {
         body: { msg },
       } = await request(app).delete(`/api/articles/${article_id}`).expect(404);
 
-      expect(msg).toBe('Article not found');
+      expect(msg).toBe('Article Not Found');
     });
     test('status: 400 and a message for invalid article_id data type', async () => {
       const article_id = 'not-a-number';
@@ -288,7 +287,7 @@ describe('/api/articles/:article_id', () => {
   });
 });
 
-describe.only('/api/articles', () => {
+describe('/api/articles', () => {
   describe('GET', () => {
     test('status:200 responds with all the articles sorted by date in desc order (default)', async () => {
       const {
@@ -392,7 +391,7 @@ describe.only('/api/articles', () => {
         body: { msg },
       } = await request(app).get(`/api/articles?topic=${topic}`).expect(404);
 
-      expect(msg).toBe('Articles not found');
+      expect(msg).toBe('Articles Not Found');
     });
     test('status:200 responds with empty object for topic without articles', async () => {
       const {
@@ -548,7 +547,7 @@ describe('/api/articles/:article_id/comments', () => {
         .send(body)
         .expect(400);
 
-      expect(msg).toBe('Bad Request. Invalid body');
+      expect(msg).toBe('Bad Request. Invalid Body');
     });
     test('status 400: responds with a mesage for invalid body data type', async () => {
       const article_id = 1;
@@ -563,7 +562,7 @@ describe('/api/articles/:article_id/comments', () => {
         .send(body)
         .expect(400);
 
-      expect(msg).toBe('Bad Request. Invalid body');
+      expect(msg).toBe('Bad Request. Invalid Body');
     });
   });
 });
@@ -648,7 +647,7 @@ describe('api/comments/:comment_id', () => {
         .send(body)
         .expect(400);
 
-      expect(msg).toBe('Bad Request. Invalid body');
+      expect(msg).toBe('Bad Request. Invalid Body');
     });
     test('status 400: responds with a message for invalid data type in body', async () => {
       const comment_id = 1;
@@ -662,7 +661,7 @@ describe('api/comments/:comment_id', () => {
         .send(body)
         .expect(400);
 
-      expect(msg).toBe('Bad Request. Invalid body');
+      expect(msg).toBe('Bad Request. Invalid Body');
     });
     test('status 404: responds with a message for invalid article_id', async () => {
       const comment_id = 9999;
@@ -676,7 +675,7 @@ describe('api/comments/:comment_id', () => {
         .send(body)
         .expect(404);
 
-      expect(msg).toBe('Comment not found');
+      expect(msg).toBe('Comment Not Found');
     });
   });
 });
@@ -723,7 +722,7 @@ describe('/api/users/:username', () => {
         body: { msg },
       } = await request(app).get(`/api/users/${username}`).expect(404);
 
-      expect(msg).toBe('User not found');
+      expect(msg).toBe('User Not Found');
     });
   });
 });

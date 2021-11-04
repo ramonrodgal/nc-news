@@ -31,7 +31,7 @@ exports.updateArticleById = async (article_id, body) => {
   }
 
   if (!inc_votes || typeof inc_votes !== 'number') {
-    return Promise.reject({ status: 400, msg: 'Bad Request. Invalid body' });
+    return Promise.reject({ status: 400, msg: 'Bad Request. Invalid Body' });
   }
 
   let queryString = `
@@ -99,7 +99,7 @@ exports.fetchArticles = async (
         return [];
       }
     }
-    return Promise.reject({ status: 404, msg: 'Articles not found' });
+    return Promise.reject({ status: 404, msg: 'Articles Not Found' });
   }
 
   return rows;
@@ -165,7 +165,7 @@ exports.insertCommentByArticleId = async (article_id, requestBody) => {
   }
 
   if (!allFields || !allFieldTypes) {
-    return Promise.reject({ status: 400, msg: 'Bad Request. Invalid body' });
+    return Promise.reject({ status: 400, msg: 'Bad Request. Invalid Body' });
   }
 
   const queryString = `INSERT INTO comments (author, body, article_id) VALUES ($1, $2, $3) RETURNING *;`;
@@ -199,7 +199,7 @@ exports.removeArticleById = async (article_id) => {
   const { rows } = await db.query(queryString, queryParams);
 
   if (rows.length === 0) {
-    return Promise.reject({ status: 404, msg: 'Article not found' });
+    return Promise.reject({ status: 404, msg: 'Article Not Found' });
   }
   return;
 };
