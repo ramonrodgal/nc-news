@@ -52,7 +52,7 @@ describe('/api/topics', () => {
 
       expect(topic).toEqual(topicTest);
     });
-    test('status 400 responds with a message for invalid body', async () => {
+    test('status:400 responds with a message for invalid body', async () => {
       const body = {
         notValid: 'Not a valid field',
         description: 'The description goes here',
