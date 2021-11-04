@@ -1,5 +1,4 @@
 const db = require('../db/connection.js');
-const { formatCommentResponse } = require('../utils/models');
 
 exports.fetchArticleById = async (article_id) => {
   const queryStr = `
@@ -124,9 +123,7 @@ exports.fetchCommentsFromArticle = async (article_id) => {
     return Promise.reject({ status: 404, msg: 'Article Not Found' });
   }
 
-  const comments = rows.map((comment) => formatCommentResponse(comment));
-
-  return comments;
+  return rows;
 };
 
 exports.insertCommentByArticleId = async (article_id, requestBody) => {
