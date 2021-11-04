@@ -519,7 +519,7 @@ describe('/api/articles/:article_id/comments', () => {
 
       expect(msg).toBe('Not Found');
     });
-    test.only('status 404: responds with a message for invalid username in body', async () => {
+    test('status 404: responds with a message for invalid username in body', async () => {
       const article_id = 1;
       const body = {
         username: 'not-a-user',
@@ -614,6 +614,26 @@ describe('api/comments/:comment_id', () => {
         .expect(200);
 
       expect(comment.votes).toBe(15);
+    });
+    test.only('status 200 and respond with unchanged comment when no inc_votes is provided in the request body', async () => {
+      const comment_id = 1;
+      const body = {};
+      const {
+        body: { comment },
+      } = await request(app)
+        .patch(`/api/comments/${comment_id}`)
+        .send(body)
+        .expect(200);
+
+      const commentTest = {
+        comment_id: expect.any(Number),
+        votes: expect.any(Number),
+        created_at: expect.any(String),
+        author: expect.any(String),
+        body: expect.any(String),
+      };
+
+      expect(comment).toEqual(commentTest);
     });
     test('status 400 respond with a message for invalid key in body', async () => {
       const comment_id = 1;

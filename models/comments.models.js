@@ -1,4 +1,5 @@
 const db = require('../db/connection.js');
+const { formatCommentResponse } = require('../utils/formatCommentResponse');
 
 exports.removeCommentById = async (comment_id) => {
   const queryString = `DELETE FROM comments WHERE comment_id = $1 RETURNING *`;
@@ -15,6 +16,15 @@ exports.removeCommentById = async (comment_id) => {
 
 exports.updateCommentById = async (comment_id, body) => {
   const { inc_votes } = body;
+
+  if (Object.keys(body).length === 0) {
+    const { rows } = await db.query(
+      'SELECT * FROM comments WHERE comment_id = $1',
+      [comment_id]
+    );
+
+    return formatCommentResponse(rows[0]);
+  }
 
   if (!inc_votes || typeof inc_votes !== 'number') {
     return Promise.reject({ status: 400, msg: 'Bad Request. Invalid body' });
