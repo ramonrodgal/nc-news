@@ -189,5 +189,9 @@ exports.removeArticleById = async (article_id) => {
   const queryParams = [article_id];
 
   const { rows } = await db.query(queryString, queryParams);
+
+  if (rows.length === 0) {
+    return Promise.reject({ status: 404, msg: 'Article not found' });
+  }
   return;
 };

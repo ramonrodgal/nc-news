@@ -35,7 +35,7 @@ describe('/api/topics', () => {
       });
     });
   });
-  describe.only('POST', () => {
+  describe('POST', () => {
     test('status:200 responds with the added topic', async () => {
       const body = {
         slug: 'topic name here',
@@ -213,7 +213,7 @@ describe('/api/articles/:article_id', () => {
       expect(msg).toBe('Article Not Found');
     });
   });
-  describe.only('DELETE', () => {
+  describe('DELETE', () => {
     test('status: 204 and responds with no content', async () => {
       const article_id = 1;
       const { body } = await request(app)
@@ -222,18 +222,24 @@ describe('/api/articles/:article_id', () => {
 
       expect(body).toEqual({});
     });
+    test('status: 404 and a message for invalid article_id', async () => {
+      const article_id = 9999;
+      const {
+        body: { msg },
+      } = await request(app).delete(`/api/articles/${article_id}`).expect(404);
+
+      expect(msg).toBe('Article not found');
+    });
+    test('status: 400 and a message for invalid article_id data type', async () => {
+      const article_id = 'not-a-number';
+      const {
+        body: { msg },
+      } = await request(app).delete(`/api/articles/${article_id}`).expect(400);
+
+      expect(msg).toBe('Bad Request');
+    });
   });
 });
-
-// #### DELETE /api/articles/:article_id
-
-// Should:
-
-// - delete the given article by article_id
-
-// Respond with:
-
-// - status 204 and no content
 
 describe('/api/articles', () => {
   describe('GET', () => {
