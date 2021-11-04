@@ -1,6 +1,5 @@
-const { readFile } = require('fs/promises');
+const endpoints = require('../endpoints.json');
 
-exports.fetchEndpoints = async () => {
-  const endpoints = await readFile('endpoints.json', 'utf-8');
-  return JSON.parse(endpoints);
+exports.fetchEndpoints = () => {
+  return endpoints;
 };
