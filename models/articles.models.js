@@ -1,13 +1,10 @@
 const db = require('../db/connection.js');
-const {
-  formatArticleResponse,
-  formatCommentResponse,
-} = require('../utils/models');
+const { formatCommentResponse } = require('../utils/models');
 
 exports.fetchArticleById = async (article_id) => {
   const queryStr = `
       SELECT 
-        articles.*, COUNT(comments.comment_id) AS comment_count
+        articles.*, CAST(COUNT(comments.comment_id) AS INTEGER) AS comment_count
       FROM articles
       JOIN comments 
       ON articles.article_id = comments.article_id
@@ -22,7 +19,7 @@ exports.fetchArticleById = async (article_id) => {
     return Promise.reject({ status: 404, msg: 'Article Not Found' });
   }
 
-  return formatArticleResponse(rows[0]);
+  return rows[0];
 };
 
 exports.updateArticleById = async (article_id, body) => {

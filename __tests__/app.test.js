@@ -19,7 +19,7 @@ describe('not valid url', () => {
 
 describe('/api', () => {
   describe('GET', () => {
-    test.only('status:200 responds with an object containing all the endpoints', async () => {
+    test('status:200 responds with an object containing all the endpoints', async () => {
       const { body } = await request(app).get('/api').expect(200);
 
       expect(body['GET /api'].description).toBe(
@@ -103,7 +103,7 @@ describe('/api/articles/:article_id', () => {
         article_id: 1,
         body: 'I find this existence challenging',
         topic: 'mitch',
-        created_at: '2020-07-09 20:11:00',
+        created_at: expect.any(String),
         votes: 100,
         comment_count: 11,
       };
