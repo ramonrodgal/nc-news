@@ -91,7 +91,7 @@ describe('/api/topics', () => {
 
 describe('/api/articles/:article_id', () => {
   describe('GET', () => {
-    test.only('status 200, responds with a single article', async () => {
+    test('status 200, responds with a single article', async () => {
       const article_id = 2;
       const {
         body: { article },
@@ -451,6 +451,16 @@ describe('/api/articles/:article_id/comments', () => {
         expect(comment).toEqual(commentTest);
       });
     });
+    test('status 200: responds with an empty array of comments for article with no comments', async () => {
+      const article_id = 2;
+      const {
+        body: { comments },
+      } = await request(app)
+        .get(`/api/articles/${article_id}/comments`)
+        .expect(200);
+
+      expect(comments).toEqual([]);
+    });
     test('status 400: responds with a message', async () => {
       const {
         body: { msg },
@@ -469,7 +479,7 @@ describe('/api/articles/:article_id/comments', () => {
     });
   });
   describe('POST', () => {
-    test('status 200: responds with the posted comment', async () => {
+    test.only('status 201: responds with the posted comment', async () => {
       const article_id = 1;
       const body = {
         username: 'butter_bridge',
@@ -481,7 +491,7 @@ describe('/api/articles/:article_id/comments', () => {
       } = await request(app)
         .post(`/api/articles/${article_id}/comments`)
         .send(body)
-        .expect(200);
+        .expect(201);
 
       const expected = {
         comment_id: 19,

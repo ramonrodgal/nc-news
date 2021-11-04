@@ -70,7 +70,7 @@ exports.postCommentByArticleId = async (req, res, next) => {
   try {
     const comment = await insertCommentByArticleId(article_id, requestBody);
 
-    res.status(200).send({ comment });
+    res.status(201).send({ comment });
   } catch (err) {
     next(err);
   }
