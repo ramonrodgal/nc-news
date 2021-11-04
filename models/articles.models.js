@@ -1,5 +1,6 @@
 const db = require('../db/connection.js');
 const { formatCommentResponse } = require('../utils');
+const { fetchUsersByUsername } = require('../models/users.models');
 
 exports.fetchArticleById = async (article_id) => {
   const queryStr = `
@@ -170,8 +171,8 @@ exports.insertCommentByArticleId = async (article_id, requestBody) => {
 
   if (user.length === 0) {
     return Promise.reject({
-      status: 400,
-      msg: 'Bad Request. Invalid username',
+      status: 404,
+      msg: 'Username does not exist',
     });
   }
 

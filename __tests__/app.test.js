@@ -479,7 +479,7 @@ describe('/api/articles/:article_id/comments', () => {
     });
   });
   describe('POST', () => {
-    test.only('status 201: responds with the posted comment', async () => {
+    test('status 201: responds with the posted comment', async () => {
       const article_id = 1;
       const body = {
         username: 'butter_bridge',
@@ -519,7 +519,7 @@ describe('/api/articles/:article_id/comments', () => {
 
       expect(msg).toBe('Not Found');
     });
-    test('status 400: responds with a message for invalid username in body', async () => {
+    test.only('status 404: responds with a message for invalid username in body', async () => {
       const article_id = 1;
       const body = {
         username: 'not-a-user',
@@ -530,9 +530,9 @@ describe('/api/articles/:article_id/comments', () => {
       } = await request(app)
         .post(`/api/articles/${article_id}/comments`)
         .send(body)
-        .expect(400);
+        .expect(404);
 
-      expect(msg).toEqual('Bad Request. Invalid username');
+      expect(msg).toEqual('Username does not exist');
     });
     test('status 400: responds with a mesage for invalid body fields', async () => {
       const article_id = 1;
