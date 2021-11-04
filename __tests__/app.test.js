@@ -17,6 +17,18 @@ describe('not valid url', () => {
   });
 });
 
+describe('/api', () => {
+  describe('GET', () => {
+    test.only('status:200 responds with an object containing all the endpoints', async () => {
+      const { body } = await request(app).get('/api').expect(200);
+
+      expect(body['GET /api'].description).toBe(
+        'serves up a json representation of all the available endpoints of the api'
+      );
+    });
+  });
+});
+
 describe('/api/topics', () => {
   describe('GET', () => {
     test('status 200: responds with an array containing all the topics in the correct format', async () => {
