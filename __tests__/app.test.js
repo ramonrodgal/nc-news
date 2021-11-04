@@ -144,7 +144,7 @@ describe('/api/articles/:article_id', () => {
         article_id: 1,
         body: 'I find this existence challenging',
         topic: 'mitch',
-        created_at: '2020-07-09 20:11:00',
+        created_at: expect.any(String),
         votes: 101,
         comment_count: 11,
       };
@@ -169,7 +169,7 @@ describe('/api/articles/:article_id', () => {
         article_id: 1,
         body: 'I find this existence challenging',
         topic: 'mitch',
-        created_at: '2020-07-09 20:11:00',
+        created_at: expect.any(String),
         votes: 50,
         comment_count: 11,
       };
@@ -208,7 +208,7 @@ describe('/api/articles/:article_id', () => {
 
       expect(msg).toBe('Bad Request. Invalid body');
     });
-    test('status 404: responds with a message for invalid article_id', async () => {
+    test('status 404: responds with a message for article not found', async () => {
       const article_id = 9999;
 
       const body = {
@@ -223,6 +223,20 @@ describe('/api/articles/:article_id', () => {
         .expect(404);
 
       expect(msg).toBe('Article Not Found');
+    });
+    test('status 400: responds with a message for invalid article_id', async () => {
+      const article_id = 'not-an-id';
+      const body = {
+        inc_votes: 1,
+      };
+      const {
+        body: { msg },
+      } = await request(app)
+        .patch(`/api/articles/${article_id}`)
+        .send(body)
+        .expect(400);
+
+      expect(msg).toBe('Bad Request');
     });
   });
   describe('DELETE', () => {
