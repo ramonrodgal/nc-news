@@ -8,6 +8,15 @@ exports.fetchTopics = async () => {
 exports.insertTopic = async (body) => {
   const { slug, description } = body;
 
+  if (
+    !slug ||
+    !description ||
+    typeof slug !== 'string' ||
+    typeof slug !== 'string'
+  ) {
+    return Promise.reject({ status: 400, msg: 'Bad request. Invalid body' });
+  }
+
   const queryString = `
     INSERT INTO topics
       (slug, description)

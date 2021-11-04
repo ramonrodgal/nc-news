@@ -52,6 +52,17 @@ describe('/api/topics', () => {
 
       expect(topic).toEqual(topicTest);
     });
+    test('status 400 responds with a message for invalid body', async () => {
+      const body = {
+        notValid: 'Not a valid field',
+        description: 'The description goes here',
+      };
+      const {
+        body: { msg },
+      } = await request(app).post('/api/topics').send(body).expect(400);
+
+      expect(msg).toBe('Bad request. Invalid body');
+    });
   });
 });
 
