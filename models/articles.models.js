@@ -88,10 +88,10 @@ exports.fetchArticles = async (
     return Promise.reject({ status: 404, msg: 'Articles not found' });
   }
 
-  const articles = rows.map((article) => formatArticleResponse(article));
-
-  return articles;
+  return rows;
 };
+
+///REMOVE FORMART ARTICLES
 
 exports.insertArticle = async (requestBody) => {
   const { author, title, body, topic } = requestBody;
