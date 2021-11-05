@@ -5,6 +5,7 @@ const {
   formatArticles,
   formatComments,
   formatCommentResponse,
+  isNumber,
 } = require('../utils');
 
 describe('formatUsers', () => {
@@ -368,6 +369,7 @@ describe('formatComments', () => {
     ]);
   });
 });
+
 describe('formatCommentResponse', () => {
   const input = {
     comment_id: 4,
@@ -400,5 +402,24 @@ describe('formatCommentResponse', () => {
       author: 'icellusedkars',
       body: ' I carry a log — yes. Is it funny to you? It is not to me.',
     });
+  });
+});
+
+describe('isNumber', () => {
+  test('Returns a boolean', () => {
+    expect(typeof isNumber()).toBe('boolean');
+  });
+  test('Returns true when passed a number', () => {
+    const input = '5';
+    expect(isNumber(input)).toBe(true);
+  });
+  test('Returns false when passed not a number', () => {
+    const input = '5four';
+    expect(isNumber(input)).toBe(false);
+  });
+  test('Does not mutate the original data', () => {
+    const input = '55';
+    isNumber(input);
+    expect(input).toBe('55');
   });
 });

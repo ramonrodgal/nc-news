@@ -1,9 +1,10 @@
-const { formatUsers } = require('../utils/formatUsers');
-const { formatTopics } = require('../utils/formatTopics');
-const { formatDate } = require('../utils/formatDate');
-const { formatArticles } = require('../utils/formatArticles');
+const { formatUsers } = require('./formatUsers');
+const { formatTopics } = require('./formatTopics');
+const { formatDate } = require('./formatDate');
+const { formatArticles } = require('./formatArticles');
 const { formatComments } = require('./formatComments');
 const { formatCommentResponse } = require('./formatCommentResponse');
+const { isNumber } = require('./isNumber');
 
 module.exports = {
   formatUsers,
@@ -12,4 +13,5 @@ module.exports = {
   formatArticles,
   formatComments,
   formatCommentResponse,
+  isNumber,
 };
