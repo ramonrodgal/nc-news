@@ -162,6 +162,18 @@ exports.insertArticle = async (requestBody) => {
     return Promise.reject({ status: 400, msg: 'Bad Request. Invalid Body' });
   }
 
+  const { rows: user } = await db.query(
+    `SELECT * FROM users WHERE username = $1`,
+    [author]
+  );
+
+  if (user.length === 0) {
+    return Promise.reject({
+      status: 400,
+      msg: 'Bad Request. Invalid author in body',
+    });
+  }
+
   let queryString = `
     INSERT INTO articles 
       (title, topic, author, body)

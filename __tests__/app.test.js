@@ -474,6 +474,19 @@ describe('/api/articles', () => {
 
       expect(msg).toBe('Bad Request. Invalid Body');
     });
+    test('status:400 responds with a message for invalid username', async () => {
+      const body = {
+        author: 'not-a-valid-user',
+        title: 'I love bananas',
+        body: 'Lorem ipsum dolor sit amet. Jungle jungle monkey banana banana!',
+        topic: 'mitch',
+      };
+      const {
+        body: { msg },
+      } = await request(app).post('/api/articles').send(body).expect(400);
+
+      expect(msg).toBe('Bad Request. Invalid author in body');
+    });
   });
 });
 
@@ -629,7 +642,7 @@ describe('/api/articles/:article_id/comments', () => {
 
       expect(msg).toEqual('Username does not exist');
     });
-    test('status:400 responds with a mesage for invalid body fields', async () => {
+    test('status:400 responds with a message for invalid body fields', async () => {
       const article_id = 1;
       const body = {
         author: 'invalid',
@@ -644,7 +657,7 @@ describe('/api/articles/:article_id/comments', () => {
 
       expect(msg).toBe('Bad Request. Invalid Body');
     });
-    test('status:400 responds with a mesage for invalid body data type', async () => {
+    test('status:400 responds with a message for invalid body data type', async () => {
       const article_id = 1;
       const body = {
         username: 25,
