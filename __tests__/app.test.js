@@ -451,13 +451,13 @@ describe('/api/articles/:article_id/comments', () => {
   describe('GET', () => {
     test('status 200: responds with an array of comments in the correct format limited by 10 results(default)', async () => {
       const article_id = 1;
-      const {
-        body: { comments },
-      } = await request(app)
+      const { body } = await request(app)
         .get(`/api/articles/${article_id}/comments`)
         .expect(200);
 
-      expect(comments.length).toEqual(10);
+      expect(body.comments.length).toBe(10);
+
+      expect(body.total_count).toBe(11);
 
       const commentTest = {
         comment_id: expect.any(Number),
@@ -467,19 +467,18 @@ describe('/api/articles/:article_id/comments', () => {
         body: expect.any(String),
       };
 
-      comments.forEach((comment) => {
+      body.comments.forEach((comment) => {
         expect(comment).toEqual(commentTest);
       });
     });
     test('status 200: responds with an empty array of comments for article with no comments', async () => {
       const article_id = 2;
-      const {
-        body: { comments },
-      } = await request(app)
+      const { body } = await request(app)
         .get(`/api/articles/${article_id}/comments`)
         .expect(200);
 
-      expect(comments).toEqual([]);
+      expect(body.total_count).toEqual(0);
+      expect(body.comments).toEqual([]);
     });
     test('status 400: responds with a message', async () => {
       const {

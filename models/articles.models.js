@@ -139,6 +139,8 @@ exports.insertArticle = async (requestBody) => {
 };
 
 exports.fetchCommentsFromArticle = async (article_id, limit = 10, p) => {
+  const response = {};
+
   let queryString = `
     SELECT comment_id, votes, created_at, author, body
     FROM comments
@@ -146,6 +148,13 @@ exports.fetchCommentsFromArticle = async (article_id, limit = 10, p) => {
     LIMIT $2`;
 
   const queryParams = [article_id, limit];
+
+  const { rows: comments } = await db.query(
+    'SELECT * FROM comments WHERE article_id = $1',
+    [article_id]
+  );
+
+  response.total_count = comments.length;
 
   if (p) {
     const offset = limit * (p - 1);
@@ -157,13 +166,14 @@ exports.fetchCommentsFromArticle = async (article_id, limit = 10, p) => {
 
   if (rows.length === 0) {
     const article = await this.fetchArticleById(article_id);
-    if (article) {
-      return [];
+    if (!article) {
+      return Promise.reject({ status: 404, msg: 'Article Not Found' });
     }
-    return Promise.reject({ status: 404, msg: 'Article Not Found' });
   }
 
-  return rows;
+  response.comments = rows;
+
+  return response;
 };
 
 exports.insertCommentByArticleId = async (article_id, requestBody) => {

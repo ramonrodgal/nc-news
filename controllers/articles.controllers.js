@@ -59,7 +59,7 @@ exports.getCommentsFromArticle = async (req, res, next) => {
 
   try {
     const comments = await fetchCommentsFromArticle(article_id, limit, p);
-    res.status(200).send({ comments });
+    res.status(200).send(comments);
   } catch (err) {
     next(err);
   }
