@@ -290,11 +290,10 @@ describe('/api/articles/:article_id', () => {
 describe('/api/articles', () => {
   describe('GET', () => {
     test('status:200 responds with all the articles sorted by date in desc order limit by 10(default)', async () => {
-      const {
-        body: { articles },
-      } = await request(app).get('/api/articles').expect(200);
+      const { body } = await request(app).get('/api/articles').expect(200);
 
-      expect(articles.length).toBe(10);
+      expect(body.articles.length).toBe(10);
+      expect(body.total_count).toBe(12);
 
       const articleTest = {
         author: expect.any(String),
@@ -307,11 +306,11 @@ describe('/api/articles', () => {
         comment_count: expect.any(Number),
       };
 
-      articles.forEach((article) => {
+      body.articles.forEach((article) => {
         expect(article).toEqual(articleTest);
       });
 
-      expect(articles).toBeSorted({ key: 'created_at', descending: true });
+      expect(body.articles).toBeSorted({ key: 'created_at', descending: true });
     });
     test('status:200 responds with all the articles sorted by any valid column in desc order(default)', async () => {
       const columns = [
@@ -394,11 +393,12 @@ describe('/api/articles', () => {
       expect(msg).toBe('Articles Not Found');
     });
     test('status:200 responds with empty object for topic without articles', async () => {
-      const {
-        body: { articles },
-      } = await request(app).get('/api/articles?topic=paper').expect(200);
+      const { body } = await request(app)
+        .get('/api/articles?topic=paper')
+        .expect(200);
 
-      expect(articles).toEqual([]);
+      expect(body.total_count).toBe(0);
+      expect(body.articles).toEqual([]);
     });
     test('status:200 responds with the articles limited by a certain number', async () => {
       const limit = 5;
@@ -456,8 +456,6 @@ describe('/api/articles/:article_id/comments', () => {
       } = await request(app)
         .get(`/api/articles/${article_id}/comments`)
         .expect(200);
-
-      console.log(comments);
 
       expect(comments.length).toEqual(10);
 

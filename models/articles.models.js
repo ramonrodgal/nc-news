@@ -58,6 +58,8 @@ exports.fetchArticles = async (
   limit = 10,
   page
 ) => {
+  const response = {};
+
   if (
     ![
       'article_id',
@@ -90,6 +92,10 @@ exports.fetchArticles = async (
 
   queryString += ` GROUP BY articles.article_id ORDER BY ${sort_by} ${order}`;
 
+  const { rows: articles } = await db.query(queryString);
+
+  response.total_count = articles.length;
+
   if (limit) {
     queryString += ` LIMIT ${limit}`;
     if (page) {
@@ -105,14 +111,15 @@ exports.fetchArticles = async (
       const { rows } = await db.query('SELECT * FROM topics WHERE slug = $1', [
         topic,
       ]);
-      if (rows.length > 0) {
-        return [];
+      if (rows.length === 0) {
+        return Promise.reject({ status: 404, msg: 'Articles Not Found' });
       }
     }
-    return Promise.reject({ status: 404, msg: 'Articles Not Found' });
   }
 
-  return rows;
+  response.articles = rows;
+
+  return response;
 };
 
 exports.insertArticle = async (requestBody) => {

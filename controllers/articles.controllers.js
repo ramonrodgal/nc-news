@@ -36,7 +36,7 @@ exports.getArticles = async (req, res, next) => {
 
   try {
     const articles = await fetchArticles(sort_by, order, topic, limit, page);
-    res.status(200).send({ articles });
+    res.status(200).send(articles);
   } catch (err) {
     next(err);
   }
