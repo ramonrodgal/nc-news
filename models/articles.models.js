@@ -131,14 +131,20 @@ exports.insertArticle = async (requestBody) => {
   const article_id = rows[0].article_id;
 };
 
-exports.fetchCommentsFromArticle = async (article_id, limit = 10) => {
-  const queryString = `
+exports.fetchCommentsFromArticle = async (article_id, limit = 10, p) => {
+  let queryString = `
     SELECT comment_id, votes, created_at, author, body
     FROM comments
     WHERE article_id = $1
     LIMIT $2`;
 
   const queryParams = [article_id, limit];
+
+  if (p) {
+    const offset = limit * (p - 1);
+    queryString += ` OFFSET $3`;
+    queryParams.push(offset);
+  }
 
   const { rows } = await db.query(queryString, queryParams);
 

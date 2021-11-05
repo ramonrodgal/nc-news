@@ -457,6 +457,8 @@ describe('/api/articles/:article_id/comments', () => {
         .get(`/api/articles/${article_id}/comments`)
         .expect(200);
 
+      console.log(comments);
+
       expect(comments.length).toEqual(10);
 
       const commentTest = {
@@ -507,6 +509,21 @@ describe('/api/articles/:article_id/comments', () => {
         .expect(200);
 
       expect(comments.length).toBe(limit);
+    });
+    test('status:200 responds with the comments limited by certain number and the page to which to start', async () => {
+      const limit = 2;
+      const page = 2;
+      const article_id = 1;
+      const {
+        body: { comments },
+      } = await request(app).get(
+        `/api/articles/${article_id}/comments?limit=${limit}&p=${page}`
+      );
+
+      expect(comments.length).toBe(2);
+
+      expect(comments[0].comment_id).toBe(4);
+      expect(comments[1].comment_id).toBe(5);
     });
   });
   describe('POST', () => {
