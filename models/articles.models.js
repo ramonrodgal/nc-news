@@ -55,7 +55,8 @@ exports.fetchArticles = async (
   sort_by = 'created_at',
   order = 'desc',
   topic,
-  limit = 10
+  limit = 10,
+  page
 ) => {
   if (
     ![
@@ -91,6 +92,10 @@ exports.fetchArticles = async (
 
   if (limit) {
     queryString += ` LIMIT ${limit}`;
+    if (page) {
+      const offset = limit * page;
+      queryString += ` OFFSET ${offset}`;
+    }
   }
 
   const { rows } = await db.query(queryString);
