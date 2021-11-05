@@ -287,7 +287,7 @@ describe('/api/articles/:article_id', () => {
   });
 });
 
-describe.only('/api/articles', () => {
+describe('/api/articles', () => {
   describe('GET', () => {
     test('status:200 responds with all the articles sorted by date in desc order limit by 10(default)', async () => {
       const {
@@ -436,8 +436,8 @@ describe.only('/api/articles', () => {
 });
 
 describe('/api/articles/:article_id/comments', () => {
-  describe('GET', () => {
-    test('status 200: responds with an array of comments in the correct format', async () => {
+  describe.only('GET', () => {
+    test('status 200: responds with an array of comments in the correct format limited by 10 results(default)', async () => {
       const article_id = 1;
       const {
         body: { comments },
@@ -445,7 +445,7 @@ describe('/api/articles/:article_id/comments', () => {
         .get(`/api/articles/${article_id}/comments`)
         .expect(200);
 
-      expect(comments.length).toEqual(11);
+      expect(comments.length).toEqual(10);
 
       const commentTest = {
         comment_id: expect.any(Number),
@@ -484,6 +484,17 @@ describe('/api/articles/:article_id/comments', () => {
       } = await request(app).get('/api/articles/9999/comments').expect(404);
 
       expect(msg).toEqual('Article Not Found');
+    });
+    test('status 200: responds with the comments limited by query', async () => {
+      const limit = 5;
+      const article_id = 1;
+      const {
+        body: { comments },
+      } = await request(app)
+        .get(`/api/articles/${article_id}/comments?limit=${limit}`)
+        .expect(200);
+
+      expect(comments.length).toBe(limit);
     });
   });
   describe('POST', () => {
