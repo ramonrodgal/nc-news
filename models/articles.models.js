@@ -79,6 +79,13 @@ exports.fetchArticles = async (
     return Promise.reject({ status: 400, msg: 'Invalid order query' });
   }
 
+  if (!/^\d+$/.test(limit)) {
+    return Promise.reject({
+      status: 400,
+      msg: 'Bad Request. Invalid limit data type',
+    });
+  }
+
   let queryString = `
       SELECT 
         articles.*, CAST(COUNT(comments.comment_id)AS INTEGER) AS comment_count
