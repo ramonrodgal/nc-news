@@ -538,7 +538,7 @@ describe('/api/articles/:article_id/comments', () => {
       expect(comments[0].comment_id).toBe(4);
       expect(comments[1].comment_id).toBe(5);
     });
-    test.only('status:400 responds with a message for invalid data type in limit query', async () => {
+    test('status:400 responds with a message for invalid data type in limit query', async () => {
       const limit = 'not-a-number';
       const article_id = 1;
       const {
@@ -547,7 +547,14 @@ describe('/api/articles/:article_id/comments', () => {
         `/api/articles/${article_id}/comments?limit=${limit}`
       );
 
-      console.log(msg);
+      expect(msg).toBe('Bad Request. Invalid query data type');
+    });
+    test('status:400 responds with a message for invalid data type in limit query', async () => {
+      const p = 'not-a-number';
+      const article_id = 1;
+      const {
+        body: { msg },
+      } = await request(app).get(`/api/articles/${article_id}/comments?p=${p}`);
 
       expect(msg).toBe('Bad Request. Invalid query data type');
     });

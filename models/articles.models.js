@@ -176,6 +176,12 @@ exports.fetchCommentsFromArticle = async (article_id, limit = 10, p) => {
   response.total_count = comments.length;
 
   if (p) {
+    if (!isNumber(p)) {
+      return Promise.reject({
+        status: 400,
+        msg: 'Bad Request. Invalid query data type',
+      });
+    }
     const offset = limit * (p - 1);
     queryString += ` OFFSET $3`;
     queryParams.push(offset);
