@@ -137,6 +137,31 @@ exports.fetchArticles = async (
 exports.insertArticle = async (requestBody) => {
   const { author, title, body, topic } = requestBody;
 
+  const requiredFields = ['author', 'title', 'body', 'topic'];
+  let allFields = true;
+  let allFieldTypes = true;
+  const fieldTypesReference = {
+    author: 'string',
+    title: 'string',
+    body: 'string',
+    topic: 'string',
+  };
+
+  for (let requiredField of requiredFields) {
+    if (!requestBody.hasOwnProperty(requiredField)) {
+      allFields = false;
+    }
+    if (
+      fieldTypesReference[requiredField] !== typeof requestBody[requiredField]
+    ) {
+      allFieldTypes = false;
+    }
+  }
+
+  if (!allFields || !allFieldTypes) {
+    return Promise.reject({ status: 400, msg: 'Bad Request. Invalid Body' });
+  }
+
   let queryString = `
     INSERT INTO articles 
       (title, topic, author, body)

@@ -437,7 +437,7 @@ describe('/api/articles', () => {
       expect(msg).toBe('Bad Request. Invalid query data type');
     });
   });
-  describe.only('POST', () => {
+  describe('POST', () => {
     test('status:201 responds with the added article', async () => {
       const body = {
         author: 'lurker',
@@ -461,6 +461,18 @@ describe('/api/articles', () => {
       };
 
       expect(article).toEqual(articleTest);
+    });
+    test('status:400 responds with message for incomplete body', async () => {
+      const body = {
+        author: 'lurker',
+        body: 'Lorem ipsum dolor sit amet. Jungle jungle monkey banana banana!',
+        topic: 'mitch',
+      };
+      const {
+        body: { msg },
+      } = await request(app).post('/api/articles').send(body).expect(400);
+
+      expect(msg).toBe('Bad Request. Invalid Body');
     });
   });
 });
