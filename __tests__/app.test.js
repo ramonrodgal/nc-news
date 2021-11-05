@@ -288,7 +288,7 @@ describe('/api/articles/:article_id', () => {
 });
 
 describe('/api/articles', () => {
-  describe.only('GET', () => {
+  describe('GET', () => {
     test('status:200 responds with all the articles sorted by date in desc order limit by 10(default)', async () => {
       const { body } = await request(app).get('/api/articles').expect(200);
 
@@ -537,6 +537,19 @@ describe('/api/articles/:article_id/comments', () => {
 
       expect(comments[0].comment_id).toBe(4);
       expect(comments[1].comment_id).toBe(5);
+    });
+    test.only('status:400 responds with a message for invalid data type in limit query', async () => {
+      const limit = 'not-a-number';
+      const article_id = 1;
+      const {
+        body: { msg },
+      } = await request(app).get(
+        `/api/articles/${article_id}/comments?limit=${limit}`
+      );
+
+      console.log(msg);
+
+      expect(msg).toBe('Bad Request. Invalid query data type');
     });
   });
   describe('POST', () => {

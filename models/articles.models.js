@@ -153,6 +153,13 @@ exports.insertArticle = async (requestBody) => {
 exports.fetchCommentsFromArticle = async (article_id, limit = 10, p) => {
   const response = {};
 
+  if (!isNumber(limit)) {
+    return Promise.reject({
+      status: 400,
+      msg: 'Bad Request. Invalid query data type',
+    });
+  }
+
   let queryString = `
     SELECT comment_id, votes, created_at, author, body
     FROM comments
