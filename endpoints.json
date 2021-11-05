@@ -23,8 +23,9 @@
   },
   "GET /api/articles": {
     "description": "serves an array of all topics",
-    "queries": ["author", "topic", "sort_by", "order"],
+    "queries": ["author", "topic", "sort_by", "order", "limit", "p"],
     "exampleResponse": {
+      "total_count": 10,
       "articles": [
         {
           "title": "Seafood substitutions are increasing",
@@ -74,23 +75,26 @@
   },
   "GET /api/articles/:article_id/comments": {
     "description": "serves and array of comment for the given article_id",
-    "queries": [],
-    "exampleResponse": [
-      {
-        "comment_id": 31,
-        "votes": 11,
-        "created_at": "2020-09-26 16:16:00",
-        "author": "weegembump",
-        "body": "Sit sequi odio suscipit. Iure quisquam qui alias distinctio eos officia enim aut sit. Corrupti ut praesentium ut iste earum itaque qui. Dolores in ab rerum consequuntur. Id ab aliquid autem dolore."
-      },
-      {
-        "comment_id": 33,
-        "votes": 4,
-        "created_at": "2019-12-31 21:21:00",
-        "author": "cooljmessy",
-        "body": "Explicabo perspiciatis voluptatem sunt tenetur maxime aut. Optio totam modi. Perspiciatis et quia."
-      }
-    ]
+    "queries": ["limit", "p"],
+    "exampleResponse": {
+      "total_count": 20,
+      "comments": [
+        {
+          "comment_id": 31,
+          "votes": 11,
+          "created_at": "2020-09-26 16:16:00",
+          "author": "weegembump",
+          "body": "Sit sequi odio suscipit. Iure quisquam qui alias distinctio eos officia enim aut sit. Corrupti ut praesentium ut iste earum itaque qui. Dolores in ab rerum consequuntur. Id ab aliquid autem dolore."
+        },
+        {
+          "comment_id": 33,
+          "votes": 4,
+          "created_at": "2019-12-31 21:21:00",
+          "author": "cooljmessy",
+          "body": "Explicabo perspiciatis voluptatem sunt tenetur maxime aut. Optio totam modi. Perspiciatis et quia."
+        }
+      ]
+    }
   },
   "POST /api/articles/:article_id/comments": {
     "description": "posts a comment into the given article",
