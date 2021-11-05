@@ -287,14 +287,14 @@ describe('/api/articles/:article_id', () => {
   });
 });
 
-describe('/api/articles', () => {
+describe.only('/api/articles', () => {
   describe('GET', () => {
-    test('status:200 responds with all the articles sorted by date in desc order (default)', async () => {
+    test('status:200 responds with all the articles sorted by date in desc order limit by 10(default)', async () => {
       const {
         body: { articles },
       } = await request(app).get('/api/articles').expect(200);
 
-      expect(articles.length).toBe(12);
+      expect(articles.length).toBe(10);
 
       const articleTest = {
         author: expect.any(String),
@@ -399,6 +399,14 @@ describe('/api/articles', () => {
       } = await request(app).get('/api/articles?topic=paper').expect(200);
 
       expect(articles).toEqual([]);
+    });
+    test('status:200 responds with the articles limited by a certain number', async () => {
+      const limit = 5;
+      const {
+        body: { articles },
+      } = await request(app).get(`/api/articles?limit=${limit}`).expect(200);
+
+      expect(articles.length).toBe(limit);
     });
   });
   describe.skip('POST', () => {

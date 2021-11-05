@@ -32,10 +32,10 @@ exports.patchArticleById = async (req, res, next) => {
 };
 
 exports.getArticles = async (req, res, next) => {
-  const { sort_by, order, topic } = req.query;
+  const { sort_by, order, topic, limit } = req.query;
 
   try {
-    const articles = await fetchArticles(sort_by, order, topic);
+    const articles = await fetchArticles(sort_by, order, topic, limit);
     res.status(200).send({ articles });
   } catch (err) {
     next(err);

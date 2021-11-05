@@ -54,7 +54,8 @@ exports.updateArticleById = async (article_id, body) => {
 exports.fetchArticles = async (
   sort_by = 'created_at',
   order = 'desc',
-  topic
+  topic,
+  limit = 10
 ) => {
   if (
     ![
@@ -87,6 +88,10 @@ exports.fetchArticles = async (
   }
 
   queryString += ` GROUP BY articles.article_id ORDER BY ${sort_by} ${order}`;
+
+  if (limit) {
+    queryString += ` LIMIT ${limit}`;
+  }
 
   const { rows } = await db.query(queryString);
 
