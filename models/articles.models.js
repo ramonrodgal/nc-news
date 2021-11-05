@@ -148,6 +148,9 @@ exports.insertArticle = async (requestBody) => {
 
   const { rows } = await db.query(queryString, queryParams);
   const article_id = rows[0].article_id;
+
+  const article = await this.fetchArticleById(article_id);
+  return article;
 };
 
 exports.fetchCommentsFromArticle = async (article_id, limit = 10, p) => {

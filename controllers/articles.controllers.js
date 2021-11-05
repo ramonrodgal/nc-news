@@ -46,8 +46,8 @@ exports.postArticle = async (req, res, next) => {
   const { body: requestBody } = req;
 
   try {
-    const comment = await insertArticle(requestBody);
-    res.status(201).send({ comment });
+    const article = await insertArticle(requestBody);
+    res.status(201).send({ article });
   } catch (err) {
     next(err);
   }

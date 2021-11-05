@@ -437,7 +437,7 @@ describe('/api/articles', () => {
       expect(msg).toBe('Bad Request. Invalid query data type');
     });
   });
-  describe.skip('POST', () => {
+  describe.only('POST', () => {
     test('status:201 responds with the added article', async () => {
       const body = {
         author: 'lurker',
@@ -459,6 +459,8 @@ describe('/api/articles', () => {
         votes: expect.any(Number),
         comment_count: expect.any(Number),
       };
+
+      expect(article).toEqual(articleTest);
     });
   });
 });
