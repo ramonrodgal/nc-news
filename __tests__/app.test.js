@@ -413,20 +413,28 @@ describe('/api/articles', () => {
       const page = 2;
       const {
         body: { articles },
-      } = await request(app).get(`/api/articles?limit=${limit}&page=${page}`);
+      } = await request(app).get(`/api/articles?limit=${limit}&p=${page}`);
 
       expect(articles.length).toEqual(limit);
 
       expect(articles[0].article_id).toBe(2);
       expect(articles[1].article_id).toBe(12);
     });
-    test.only('status:400 responds with a message for invalid data type in limit query', async () => {
+    test('status:400 responds with a message for invalid data type in limit query', async () => {
       const limit = 'not-a-number';
       const {
         body: { msg },
       } = await request(app).get(`/api/articles?limit=${limit}`);
 
-      expect(msg).toBe('Bad Request. Invalid limit data type');
+      expect(msg).toBe('Bad Request. Invalid query data type');
+    });
+    test('status:400 responds with a message for invalid data type in page query', async () => {
+      const p = 'not-a-number';
+      const {
+        body: { msg },
+      } = await request(app).get(`/api/articles?p=${p}`);
+
+      expect(msg).toBe('Bad Request. Invalid query data type');
     });
   });
   describe.skip('POST', () => {

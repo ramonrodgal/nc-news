@@ -1,5 +1,5 @@
 const db = require('../db/connection.js');
-const { formatCommentResponse } = require('../utils');
+const { formatCommentResponse, isNumber } = require('../utils');
 
 exports.fetchArticleById = async (article_id) => {
   const queryStr = `
@@ -56,7 +56,7 @@ exports.fetchArticles = async (
   order = 'desc',
   topic,
   limit = 10,
-  page
+  p
 ) => {
   const response = {};
 
@@ -79,13 +79,6 @@ exports.fetchArticles = async (
     return Promise.reject({ status: 400, msg: 'Invalid order query' });
   }
 
-  if (!/^\d+$/.test(limit)) {
-    return Promise.reject({
-      status: 400,
-      msg: 'Bad Request. Invalid limit data type',
-    });
-  }
-
   let queryString = `
       SELECT 
         articles.*, CAST(COUNT(comments.comment_id)AS INTEGER) AS comment_count
@@ -104,9 +97,21 @@ exports.fetchArticles = async (
   response.total_count = articles.length;
 
   if (limit) {
+    if (!isNumber(limit)) {
+      return Promise.reject({
+        status: 400,
+        msg: 'Bad Request. Invalid query data type',
+      });
+    }
     queryString += ` LIMIT ${limit}`;
-    if (page) {
-      const offset = limit * (page - 1);
+    if (p) {
+      if (!isNumber(p)) {
+        return Promise.reject({
+          status: 400,
+          msg: 'Bad Request. Invalid query data type',
+        });
+      }
+      const offset = limit * (p - 1);
       queryString += ` OFFSET ${offset}`;
     }
   }
