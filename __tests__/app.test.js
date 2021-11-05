@@ -487,6 +487,19 @@ describe('/api/articles', () => {
 
       expect(msg).toBe('Bad Request. Invalid author in body');
     });
+    test.only('status:400 responds with a message for invalid username', async () => {
+      const body = {
+        author: 'lurker',
+        title: 'I love bananas',
+        body: 'Lorem ipsum dolor sit amet. Jungle jungle monkey banana banana!',
+        topic: 'bananas',
+      };
+      const {
+        body: { msg },
+      } = await request(app).post('/api/articles').send(body).expect(400);
+
+      expect(msg).toBe('Bad Request. Invalid topic in body');
+    });
   });
 });
 

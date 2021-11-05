@@ -174,6 +174,18 @@ exports.insertArticle = async (requestBody) => {
     });
   }
 
+  const { rows: topics } = await db.query(
+    `SELECT * FROM topics WHERE slug = $1`,
+    [topic]
+  );
+
+  if (topics.length === 0) {
+    return Promise.reject({
+      status: 400,
+      msg: 'Bad Request. Invalid topic in body',
+    });
+  }
+
   let queryString = `
     INSERT INTO articles 
       (title, topic, author, body)
