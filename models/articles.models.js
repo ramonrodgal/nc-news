@@ -93,7 +93,7 @@ exports.fetchArticles = async (
   if (limit) {
     queryString += ` LIMIT ${limit}`;
     if (page) {
-      const offset = limit * page;
+      const offset = limit * (page - 1);
       queryString += ` OFFSET ${offset}`;
     }
   }

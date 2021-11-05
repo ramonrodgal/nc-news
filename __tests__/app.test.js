@@ -294,8 +294,6 @@ describe('/api/articles', () => {
         body: { articles },
       } = await request(app).get('/api/articles').expect(200);
 
-      console.log(articles);
-
       expect(articles.length).toBe(10);
 
       const articleTest = {
@@ -410,7 +408,7 @@ describe('/api/articles', () => {
 
       expect(articles.length).toBe(limit);
     });
-    test.only('status:200 responds with articles limited by certain number and the page to wich to start', async () => {
+    test('status:200 responds with articles limited by certain number and the page to wich to start', async () => {
       const limit = 2;
       const page = 2;
       const {
@@ -419,8 +417,8 @@ describe('/api/articles', () => {
 
       expect(articles.length).toEqual(limit);
 
-      expect(articles[0].article_id).toBe(5);
-      expect(articles[1].article_id).toBe(1);
+      expect(articles[0].article_id).toBe(2);
+      expect(articles[1].article_id).toBe(12);
     });
   });
   describe.skip('POST', () => {
