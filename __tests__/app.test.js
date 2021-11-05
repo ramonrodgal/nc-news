@@ -9,7 +9,7 @@ beforeEach(() => seed(testData));
 afterAll(() => db.end());
 
 describe('not valid url', () => {
-  test('status 404 : responds with the message "Invalid URL"', async () => {
+  test('status:404 responds with the message "Invalid URL"', async () => {
     const {
       body: { msg },
     } = await request(app).get('/api/not-valid-url').expect(404);
@@ -31,7 +31,7 @@ describe('/api', () => {
 
 describe('/api/topics', () => {
   describe('GET', () => {
-    test('status 200: responds with an array containing all the topics in the correct format', async () => {
+    test('status:200 responds with an array containing all the topics in the correct format', async () => {
       const {
         body: { topics },
       } = await request(app).get('/api/topics').expect(200);
@@ -91,7 +91,7 @@ describe('/api/topics', () => {
 
 describe('/api/articles/:article_id', () => {
   describe('GET', () => {
-    test('status 200, responds with a single article', async () => {
+    test('status:200 responds with a single article', async () => {
       const article_id = 2;
       const {
         body: { article },
@@ -110,14 +110,14 @@ describe('/api/articles/:article_id', () => {
 
       expect(article).toEqual(articleTest);
     });
-    test('status 400, responds with a message', async () => {
+    test('status:400 responds with a message', async () => {
       const {
         body: { msg },
       } = await request(app).get('/api/articles/not-valid-id').expect(400);
 
       expect(msg).toBe('Bad Request');
     });
-    test('status 404, responds with a message', async () => {
+    test('status:404 responds with a message', async () => {
       const {
         body: { msg },
       } = await request(app).get('/api/articles/9999').expect(404);
@@ -126,7 +126,7 @@ describe('/api/articles/:article_id', () => {
     });
   });
   describe('PATCH', () => {
-    test('status 200: responds with the article containing the value of the property votes increased', async () => {
+    test('status:200 responds with the article containing the value of the property votes increased', async () => {
       const article_id = 1;
       const body = {
         inc_votes: 1,
@@ -151,7 +151,7 @@ describe('/api/articles/:article_id', () => {
 
       expect(article).toEqual(expected);
     });
-    test('status 200: responds with the article containing the value of the property votes decreased', async () => {
+    test('status:200 responds with the article containing the value of the property votes decreased', async () => {
       const article_id = 1;
       const body = {
         inc_votes: -50,
@@ -176,7 +176,7 @@ describe('/api/articles/:article_id', () => {
 
       expect(article).toEqual(expected);
     });
-    test('status 400: responds with the same article for empty body', async () => {
+    test('status:400 responds with the same article for empty body', async () => {
       const article_id = 1;
       const requestBody = {};
       const {
@@ -196,7 +196,7 @@ describe('/api/articles/:article_id', () => {
 
       expect(article).toEqual(expected);
     });
-    test('status 400: responds with a message for invalid key in body', async () => {
+    test('status:400 responds with a message for invalid key in body', async () => {
       const article_id = 1;
 
       const body = {
@@ -212,7 +212,7 @@ describe('/api/articles/:article_id', () => {
 
       expect(msg).toBe('Bad Request. Invalid Body');
     });
-    test('status 400: responds with a message for invalid data type in body', async () => {
+    test('status:400 responds with a message for invalid data type in body', async () => {
       const article_id = 1;
 
       const body = {
@@ -228,7 +228,7 @@ describe('/api/articles/:article_id', () => {
 
       expect(msg).toBe('Bad Request. Invalid Body');
     });
-    test('status 404: responds with a message for article not found', async () => {
+    test('status:404 responds with a message for article not found', async () => {
       const article_id = 9999;
 
       const body = {
@@ -244,7 +244,7 @@ describe('/api/articles/:article_id', () => {
 
       expect(msg).toBe('Article Not Found');
     });
-    test('status 400: responds with a message for invalid article_id', async () => {
+    test('status:400 responds with a message for invalid article_id', async () => {
       const article_id = 'not-an-id';
       const body = {
         inc_votes: 1,
@@ -260,7 +260,7 @@ describe('/api/articles/:article_id', () => {
     });
   });
   describe('DELETE', () => {
-    test('status: 204 and responds with no content', async () => {
+    test('status:204 and responds with no content', async () => {
       const article_id = 1;
       const { body } = await request(app)
         .delete(`/api/articles/${article_id}`)
@@ -268,7 +268,7 @@ describe('/api/articles/:article_id', () => {
 
       expect(body).toEqual({});
     });
-    test('status: 404 and a message for invalid article_id', async () => {
+    test('status:404 and a message for invalid article_id', async () => {
       const article_id = 9999;
       const {
         body: { msg },
@@ -276,7 +276,7 @@ describe('/api/articles/:article_id', () => {
 
       expect(msg).toBe('Article Not Found');
     });
-    test('status: 400 and a message for invalid article_id data type', async () => {
+    test('status:400 and a message for invalid article_id data type', async () => {
       const article_id = 'not-a-number';
       const {
         body: { msg },
@@ -422,7 +422,7 @@ describe('/api/articles', () => {
     });
   });
   describe.skip('POST', () => {
-    test('status 201: responds with the added article', async () => {
+    test('status:201 responds with the added article', async () => {
       const body = {
         author: 'lurker',
         title: 'I love bananas',
@@ -449,7 +449,7 @@ describe('/api/articles', () => {
 
 describe('/api/articles/:article_id/comments', () => {
   describe('GET', () => {
-    test('status 200: responds with an array of comments in the correct format limited by 10 results(default)', async () => {
+    test('status:200 responds with an array of comments in the correct format limited by 10 results(default)', async () => {
       const article_id = 1;
       const { body } = await request(app)
         .get(`/api/articles/${article_id}/comments`)
@@ -471,7 +471,7 @@ describe('/api/articles/:article_id/comments', () => {
         expect(comment).toEqual(commentTest);
       });
     });
-    test('status 200: responds with an empty array of comments for article with no comments', async () => {
+    test('status:200 responds with an empty array of comments for article with no comments', async () => {
       const article_id = 2;
       const { body } = await request(app)
         .get(`/api/articles/${article_id}/comments`)
@@ -480,7 +480,7 @@ describe('/api/articles/:article_id/comments', () => {
       expect(body.total_count).toEqual(0);
       expect(body.comments).toEqual([]);
     });
-    test('status 400: responds with a message', async () => {
+    test('status:400 responds with a message', async () => {
       const {
         body: { msg },
       } = await request(app)
@@ -489,14 +489,14 @@ describe('/api/articles/:article_id/comments', () => {
 
       expect(msg).toEqual('Bad Request');
     });
-    test('status 404: responds with a message', async () => {
+    test('status:404 responds with a message', async () => {
       const {
         body: { msg },
       } = await request(app).get('/api/articles/9999/comments').expect(404);
 
       expect(msg).toEqual('Article Not Found');
     });
-    test('status 200: responds with the comments limited by query', async () => {
+    test('status:200 responds with the comments limited by query', async () => {
       const limit = 5;
       const article_id = 1;
       const {
@@ -524,7 +524,7 @@ describe('/api/articles/:article_id/comments', () => {
     });
   });
   describe('POST', () => {
-    test('status 201: responds with the posted comment', async () => {
+    test('status:201 responds with the posted comment', async () => {
       const article_id = 1;
       const body = {
         username: 'butter_bridge',
@@ -548,7 +548,7 @@ describe('/api/articles/:article_id/comments', () => {
 
       expect(comment).toEqual(expected);
     });
-    test('status 400: responds with a message for invalid article_id', async () => {
+    test('status:400 responds with a message for invalid article_id', async () => {
       const article_id = 9999;
       const body = {
         username: 'butter_bridge',
@@ -564,7 +564,7 @@ describe('/api/articles/:article_id/comments', () => {
 
       expect(msg).toBe('Not Found');
     });
-    test('status 404: responds with a message for invalid username in body', async () => {
+    test('status:404 responds with a message for invalid username in body', async () => {
       const article_id = 1;
       const body = {
         username: 'not-a-user',
@@ -579,7 +579,7 @@ describe('/api/articles/:article_id/comments', () => {
 
       expect(msg).toEqual('Username does not exist');
     });
-    test('status 400: responds with a mesage for invalid body fields', async () => {
+    test('status:400 responds with a mesage for invalid body fields', async () => {
       const article_id = 1;
       const body = {
         author: 'invalid',
@@ -594,7 +594,7 @@ describe('/api/articles/:article_id/comments', () => {
 
       expect(msg).toBe('Bad Request. Invalid Body');
     });
-    test('status 400: responds with a mesage for invalid body data type', async () => {
+    test('status:400 responds with a mesage for invalid body data type', async () => {
       const article_id = 1;
       const body = {
         username: 25,
@@ -632,7 +632,7 @@ describe('api/comments/:comment_id', () => {
     });
   });
   describe('PATCH', () => {
-    test('status 200 and respond with the updated comment with the votes increased', async () => {
+    test('status:200 and respond with the updated comment with the votes increased', async () => {
       const comment_id = 1;
       const body = {
         inc_votes: 1,
@@ -646,7 +646,7 @@ describe('api/comments/:comment_id', () => {
 
       expect(comment.votes).toBe(17);
     });
-    test('status 200 and respond with the updated comment with the votes decreased', async () => {
+    test('status:200 and respond with the updated comment with the votes decreased', async () => {
       const comment_id = 1;
       const body = {
         inc_votes: -1,
@@ -660,7 +660,7 @@ describe('api/comments/:comment_id', () => {
 
       expect(comment.votes).toBe(15);
     });
-    test('status 200 and respond with unchanged comment when no inc_votes is provided in the request body', async () => {
+    test('status:200 and respond with unchanged comment when no inc_votes is provided in the request body', async () => {
       const comment_id = 1;
       const body = {};
       const {
@@ -680,7 +680,7 @@ describe('api/comments/:comment_id', () => {
 
       expect(comment).toEqual(commentTest);
     });
-    test('status 400 respond with a message for invalid key in body', async () => {
+    test('status:400 respond with a message for invalid key in body', async () => {
       const comment_id = 1;
       const body = {
         notValid: 200,
@@ -694,7 +694,7 @@ describe('api/comments/:comment_id', () => {
 
       expect(msg).toBe('Bad Request. Invalid Body');
     });
-    test('status 400: responds with a message for invalid data type in body', async () => {
+    test('status:400 responds with a message for invalid data type in body', async () => {
       const comment_id = 1;
       const body = {
         inc_votes: 'A lot of votes',
@@ -708,7 +708,7 @@ describe('api/comments/:comment_id', () => {
 
       expect(msg).toBe('Bad Request. Invalid Body');
     });
-    test('status 404: responds with a message for invalid article_id', async () => {
+    test('status:404 responds with a message for invalid article_id', async () => {
       const comment_id = 9999;
       const body = {
         inc_votes: 20,
@@ -727,7 +727,7 @@ describe('api/comments/:comment_id', () => {
 
 describe('/api/users', () => {
   describe('GET', () => {
-    test('status 200: responds with an array of user objects', async () => {
+    test('status:200 responds with an array of user objects', async () => {
       const {
         body: { users },
       } = await request(app).get('/api/users').expect(200);
