@@ -487,7 +487,7 @@ describe('/api/articles', () => {
 
       expect(msg).toBe('Bad Request. Invalid author in body');
     });
-    test.only('status:400 responds with a message for invalid username', async () => {
+    test('status:400 responds with a message for invalid username', async () => {
       const body = {
         author: 'lurker',
         title: 'I love bananas',
