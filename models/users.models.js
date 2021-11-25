@@ -21,3 +21,18 @@ exports.fetchUserByUsername = async (username) => {
 
   return rows[0];
 };
+
+exports.fetchArticlesByUsername = async (username) => {
+  const queryString = `SELECT * FROM articles WHERE author = $1`;
+  const queryParams = [username];
+
+  const { rows } = await db.query(queryString, queryParams);
+
+  console.log(rows);
+
+  if (rows.length === 0) {
+    return Promise.reject({ status: 404, msg: 'Articles Not Found' });
+  }
+
+  return rows;
+};

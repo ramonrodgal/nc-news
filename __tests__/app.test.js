@@ -847,3 +847,36 @@ describe('/api/users/:username', () => {
     });
   });
 });
+
+describe('/api/users/:username/articles', () => {
+  describe('GET', () => {
+    test('status:200 responds with an array of articles from the same author', async () => {
+      const username = 'butter_bridge';
+      const {
+        body: { articles },
+      } = await request(app).get(`/api/users/${username}/articles`).expect(200);
+
+      const articleTest = {
+        author: username,
+        title: expect.any(String),
+        article_id: expect.any(Number),
+        body: expect.any(String),
+        topic: expect.any(String),
+        created_at: expect.any(String),
+        votes: expect.any(Number),
+      };
+
+      articles.forEach((article) => {
+        expect(article).toEqual(articleTest);
+      });
+    });
+    test('status:404 respods with a message', async () => {
+      const username = 'notuser';
+      const {
+        body: { msg },
+      } = await request(app).get(`/api/users/${username}/articles`).expect(404);
+
+      expect(msg).toBe('Articles Not Found');
+    });
+  });
+});
