@@ -40,6 +40,26 @@
       ]
     }
   },
+  "POST /api/articles": {
+    "description": "post an article to the system",
+    "queries": [],
+    "exampleBody": {
+      "author": "lurker",
+      "title": "I love bananas",
+      "body": "Lorem ipsum dolor sit amet. Jungle jungle monkey banana banana!",
+      "topic": "mitch"
+    },
+    "exampleResponse": {
+      "author": "lurker",
+      "title": "I love bananas",
+      "article_id": 25,
+      "body": "Lorem ipsum dolor sit amet. Jungle jungle monkey banana banana!",
+      "topic": "mitch",
+      "created_at": "2020-11-07 06:03:00",
+      "votes": 0,
+      "comment_count": 0
+    }
+  },
   "GET /api/articles/:articles": {
     "description": "serves an article",
     "queries": [],
