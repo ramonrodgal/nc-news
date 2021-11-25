@@ -1,6 +1,6 @@
 # Northcoders News API
 
-This RESTful API serves data for a website similiar to Reddit. The project is built using [Node.js](https://nodejs.org) and [Express.js](http://expressjs.com/).
+This RESTful API serves data for a website similar to Reddit. The project is built using [Node.js](https://nodejs.org) and [Express.js](http://expressjs.com/).
 
 All the data is stored in a [PostgreSQL](https://www.postgresql.org/) database and the application interacts with it using [node-postgres](https://node-postgres.com/).
 
