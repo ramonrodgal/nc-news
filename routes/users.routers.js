@@ -6,5 +6,6 @@ const {
 
 usersRouters.route('/').get(getUsers);
 usersRouters.route('/:username').get(getUserByUsername);
+usersRouters.route('/:username/articles');
 
 module.exports = usersRouters;
