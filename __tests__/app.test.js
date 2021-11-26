@@ -436,6 +436,28 @@ describe('/api/articles', () => {
 
       expect(msg).toBe('Bad Request. Invalid query data type');
     });
+    test('status:200 responds with an array of articles filtered by user', async () => {
+      const username = 'butter_bridge';
+      const {
+        body: { articles },
+      } = await request(app)
+        .get(`/api/articles?author=${username}`)
+        .expect(200);
+
+      articles.forEach((article) => {
+        expect(article.author).toBe(username);
+      });
+    });
+    test('status:200 responds with an empty for invalid usernames', async () => {
+      const username = 'notAnUser';
+      const {
+        body: { articles },
+      } = await request(app)
+        .get(`/api/articles?author=${username}`)
+        .expect(200);
+
+      expect(articles.length).toBe(0);
+    });
   });
   describe('POST', () => {
     test('status:201 responds with the added article', async () => {

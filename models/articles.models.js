@@ -56,7 +56,8 @@ exports.fetchArticles = async (
   order = 'desc',
   topic,
   limit = 10,
-  p
+  p,
+  author
 ) => {
   const response = {};
 
@@ -85,6 +86,10 @@ exports.fetchArticles = async (
       FROM articles
       LEFT JOIN comments 
       ON articles.article_id = comments.article_id`;
+
+  if (author) {
+    queryString += ` WHERE articles.author = '${author}'`;
+  }
 
   if (topic) {
     queryString += ` WHERE articles.topic = '${topic}'`;
