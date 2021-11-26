@@ -91,7 +91,9 @@ exports.fetchArticles = async (
     queryString += ` WHERE articles.author = '${author}'`;
   }
 
-  if (topic) {
+  if (author && topic) {
+    queryString += ` AND articles.topic = '${topic}'`;
+  } else if (topic) {
     queryString += ` WHERE articles.topic = '${topic}'`;
   }
 
