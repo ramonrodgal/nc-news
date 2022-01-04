@@ -319,5 +319,6 @@ exports.removeArticleById = async (article_id) => {
   if (rows.length === 0) {
     return Promise.reject({ status: 404, msg: 'Article Not Found' });
   }
-  return;
+
+  return rows[0];
 };

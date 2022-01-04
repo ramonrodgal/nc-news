@@ -89,8 +89,8 @@ exports.deleteArticleById = async (req, res, next) => {
   const { article_id } = req.params;
 
   try {
-    await removeArticleById(article_id);
-    res.sendStatus(204);
+    const article = await removeArticleById(article_id);
+    res.status(200).send({ article });
   } catch (err) {
     next(err);
   }

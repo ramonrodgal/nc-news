@@ -259,14 +259,16 @@ describe('/api/articles/:article_id', () => {
       expect(msg).toBe('Bad Request');
     });
   });
-  describe('DELETE', () => {
+  describe.only('DELETE', () => {
     test('status:204 and responds with no content', async () => {
       const article_id = 1;
       const { body } = await request(app)
         .delete(`/api/articles/${article_id}`)
-        .expect(204);
+        .expect(200);
 
-      expect(body).toEqual({});
+      console.log(body);
+
+      expect(body.article.article_id).toEqual(article_id);
     });
     test('status:404 and a message for invalid article_id', async () => {
       const article_id = 9999;
@@ -457,6 +459,23 @@ describe('/api/articles', () => {
         .expect(200);
 
       expect(articles.length).toBe(0);
+    });
+    test.skip('status:200 responds with an array of articles filtered by user and topic', async () => {
+      const username = 'butter_bridge';
+      const topic = 'mitch';
+      const path = `/api/articles?topic=${topic}&author=${username}`;
+      console.log(path);
+
+      const {
+        body: { articles },
+      } = await request(app)
+        .get(`api/articles?topic=${topic}&author=${username}`)
+        .expect(200);
+
+      articles.forEach((article) => {
+        expect(article.author).toBe(username);
+        expect(article.topic).toBe(topic);
+      });
     });
   });
   describe('POST', () => {
